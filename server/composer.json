@@ -7,6 +7,11 @@
             "App\\": "src/"
         }
     },
+    "autoload_dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "CommandMaker",
@@ -16,7 +21,8 @@
     "require": {
         "slim/slim": "4.*",
         "guzzlehttp/psr7": "^2",
-        "php-di/slim-bridge": "^3.4"
+        "php-di/slim-bridge": "^3.4",
+        "spatie/phpunit-watcher": "^1.24"
     },
     "require-dev": {
         "phpstan/phpstan": "^1.11",

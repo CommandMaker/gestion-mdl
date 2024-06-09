@@ -4,14 +4,12 @@ namespace App\Core\Entity;
 
 use ReflectionClass;
 
-trait EntityMapper {
-
+trait EntityMapper
+{
     /**
      * Create an entity from the specified array
      *
-     * @param mixed[] $data
-     *
-     * @return self
+     * @param  mixed[]  $data
      */
     public static function mapFromArray(array $data): self
     {

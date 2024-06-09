@@ -2,7 +2,6 @@
 
 use DI\Bridge\Slim\Bridge;
 use DI\ContainerBuilder;
-use Psr\Container\ContainerInterface;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -14,7 +13,7 @@ $container->addDefinitions([
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         return $pdo;
-    }
+    },
 ]);
 
 $app = Bridge::create($container->build());
@@ -22,4 +21,3 @@ $app = Bridge::create($container->build());
 (require __DIR__ . '/../routes/web.php')($app);
 
 $app->run();
-

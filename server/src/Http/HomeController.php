@@ -6,7 +6,8 @@ use App\Core\Http\ControllerTrait;
 use GuzzleHttp\Psr7\Response;
 use PDO;
 
-class HomeController {
+class HomeController
+{
     use ControllerTrait;
 
     public function index(Response $response, PDO $db): Response

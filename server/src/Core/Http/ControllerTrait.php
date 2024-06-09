@@ -3,9 +3,9 @@
 namespace App\Core\Http;
 
 use GuzzleHttp\Psr7\Response;
-use Psr\Http\Message\StreamInterface;
 
-trait ControllerTrait {
+trait ControllerTrait
+{
     protected function json(Response $response, mixed $data, int $status = 200): Response
     {
         $response->getBody()->write(json_encode($data) ?: '');

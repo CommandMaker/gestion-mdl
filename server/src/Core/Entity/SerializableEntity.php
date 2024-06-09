@@ -2,15 +2,13 @@
 
 namespace App\Core\Entity;
 
-trait SerializableEntity {
-
+trait SerializableEntity
+{
     /**
      * Return the entity serialized to JSON
      * If no props are specified, it will use the $serializable property of the entity class
      *
-     * @param string[]|null $props The props to serialize
-     *
-     * @return string|false
+     * @param  string[]|null  $props  The props to serialize
      */
     public function toJson(?array $props = null): string|false
     {
@@ -21,8 +19,7 @@ trait SerializableEntity {
      * Return the specified props in an array style.
      * If no props are specified, it will use the $serializable property of the entity class
      *
-     * @param string[]|null $props The props to serialize
-     * 
+     * @param  string[]|null  $props  The props to serialize
      * @return string[] The serialized array
      */
     public function toArray(?array $props = null): array
@@ -53,7 +50,7 @@ trait SerializableEntity {
 
             return $serialized;
         }
-        
+
         return [];
     }
 }

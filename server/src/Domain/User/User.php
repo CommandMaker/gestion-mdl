@@ -5,21 +5,27 @@ namespace App\Domain\User;
 use App\Core\Entity\EntityMapper;
 use App\Core\Entity\SerializableEntity;
 
-class User {
+class User
+{
     use EntityMapper, SerializableEntity;
 
     /**
      * The props used for serialization
      *
-     * @var string[] $serializable
+     * @var string[]
      */
     protected array $serializable = ['id', 'firstname', 'lastname', 'grade', 'code', 'gender'];
 
     private int $id;
+
     private string $firstname;
+
     private string $lastname;
+
     private string $gender;
+
     private string $code;
+
     private string $grade;
 
     public function getId(): int
@@ -30,6 +36,7 @@ class User {
     public function setId(int $id): self
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -41,6 +48,7 @@ class User {
     public function setFirstname(string $firstname): self
     {
         $this->firstname = $firstname;
+
         return $this;
     }
 
@@ -52,6 +60,7 @@ class User {
     public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
+
         return $this;
     }
 
@@ -63,6 +72,7 @@ class User {
     public function setGender(string $gender): self
     {
         $this->gender = $gender;
+
         return $this;
     }
 
@@ -74,6 +84,7 @@ class User {
     public function setCode(string $code): self
     {
         $this->code = $code;
+
         return $this;
     }
 
@@ -85,6 +96,7 @@ class User {
     public function setGrade(string $grade): self
     {
         $this->grade = $grade;
+
         return $this;
     }
 }

@@ -19,17 +19,23 @@
 namespace App\Http;
 
 use App\Core\Http\ControllerTrait;
+use App\Domain\TimePeriod\TimePeriod;
 use GuzzleHttp\Psr7\Response;
 use PDO;
 
-class HomeController
+class TimePeriodController
 {
     use ControllerTrait;
 
-    public function index(Response $response, PDO $db): Response
+    public function getAll(Response $response, PDO $pdo): Response
     {
+        $q = $pdo->prepare('SELECT * from time_periods');
+        $q->execute();
+        $data = array_map(fn ($a) => TimePeriod::mapFromArray($a)->toArray(), $q->fetchAll());
+
         return $this->json($response, [
             'status' => 'ok',
+            'data' => $data,
         ]);
     }
 }

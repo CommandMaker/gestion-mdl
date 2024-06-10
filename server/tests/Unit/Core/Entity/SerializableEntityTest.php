@@ -18,7 +18,9 @@
 
 namespace Tests\Unit\Core\Entity;
 
+use App\Domain\TimePeriod\TimePeriod;
 use App\Domain\User\User;
+use App\Http\TimePeriodController;
 use PHPUnit\Framework\TestCase;
 
 class SerializableEntityTest extends TestCase
@@ -62,5 +64,23 @@ class SerializableEntityTest extends TestCase
             ->setCode('an01');
 
         $this->assertEqualsCanonicalizing($user->toArray(), $data);
+    }
+
+    public function testIfSerializeCorrectlyUsingSerializedGetter(): void
+    {
+        $data = [
+            'id' => 1,
+            'displayName' => '8h-9h',
+            'startTime' => '07:55:00',
+            'endTime' => '08:55:00'
+        ];
+
+        $timePeriod = (new TimePeriod())
+            ->setId(1)
+            ->setDisplayName('8h-9h')
+            ->setStartTime('2024-06-10 07:55:00.000000')
+            ->setEndTime('2024-06-10 08:55:00.000000');
+
+        $this->assertSame($timePeriod->toArray(), $data);
     }
 }

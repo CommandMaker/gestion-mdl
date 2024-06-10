@@ -42,6 +42,12 @@ trait SerializableEntity
             $serialized = [];
             foreach ($this->serializable as $prop) {
                 $methodName = 'get' . ucfirst(str_replace(' ', '', $prop));
+                $methodNameSerialized = $methodName . 'Serialized';
+
+                if (method_exists($this, $methodNameSerialized)) {
+                    $serialized[$prop] = $this->$methodNameSerialized();
+                    continue;
+                }
 
                 if (method_exists($this, $methodName)) {
                     $serialized[$prop] = $this->$methodName();

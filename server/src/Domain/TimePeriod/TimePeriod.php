@@ -75,6 +75,11 @@ class TimePeriod
         return $this;
     }
 
+    public function getStartTimeSerialized(): string
+    {
+        return $this->startTime->format('H:i:s');
+    }
+
     public function getEndTime(): DateTimeImmutable
     {
         return $this->endTime;
@@ -85,5 +90,10 @@ class TimePeriod
         $this->endTime = new DateTimeImmutable($endTime);
 
         return $this;
+    }
+
+    public function getEndTimeSerialized(): string
+    {
+        return $this->endTime->format('H:i:s');
     }
 }

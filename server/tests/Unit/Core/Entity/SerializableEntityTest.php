@@ -20,7 +20,6 @@ namespace Tests\Unit\Core\Entity;
 
 use App\Domain\TimePeriod\TimePeriod;
 use App\Domain\User\User;
-use App\Http\TimePeriodController;
 use PHPUnit\Framework\TestCase;
 
 class SerializableEntityTest extends TestCase
@@ -72,7 +71,7 @@ class SerializableEntityTest extends TestCase
             'id' => 1,
             'displayName' => '8h-9h',
             'startTime' => '07:55:00',
-            'endTime' => '08:55:00'
+            'endTime' => '08:55:00',
         ];
 
         $timePeriod = (new TimePeriod())

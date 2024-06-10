@@ -24,4 +24,7 @@ return function (App $app): void {
     $app->get('/', [HomeController::class, 'index']);
 
     $app->get('/api/time-periods/all', [TimePeriodController::class, 'getAll']);
+    $app->post('/api/time-periods/new', [TimePeriodController::class, 'create']);
+    $app->delete('/api/time-periods/delete/{id}', [TimePeriodController::class, 'delete']);
+    $app->post('/api/time-periods/edit/{id}', [TimePeriodController::class, 'edit']);
 };

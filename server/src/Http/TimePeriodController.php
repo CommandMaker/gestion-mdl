@@ -22,6 +22,7 @@ use App\Core\Http\ControllerTrait;
 use App\Domain\TimePeriod\TimePeriod;
 use GuzzleHttp\Psr7\Response;
 use PDO;
+use Valitron\Validator;
 
 class TimePeriodController
 {
@@ -36,6 +37,78 @@ class TimePeriodController
         return $this->json($response, [
             'status' => 'ok',
             'data' => $data,
+        ]);
+    }
+
+    public function create(Response $response, PDO $pdo): Response
+    {
+        $validator = new Validator($_POST);
+
+        $validator->rule('required', ['displayName', 'startTime', 'endTime']);
+        $validator->rule('lengthMin', 'displayName', 2);
+
+        if (!$validator->validate()) {
+            return $this->json($response, [
+                'status' => 'error',
+                'errors' => $validator->errors(),
+            ]);
+        }
+
+        $entity = TimePeriod::mapFromArray($_POST);
+
+        $q = $pdo->prepare('INSERT INTO time_periods (displayName, startTime, endTime) VALUES (?, ?, ?)');
+        $q->execute([$entity->getDisplayName(), $entity->getStartTimeSerialized(), $entity->getEndTimeSerialized()]);
+
+        return $this->json($response, [
+            'status' => 'ok',
+            'data' => $entity->toArray(['displayName', 'startTime', 'endTime']),
+        ]);
+    }
+
+    public function delete(Response $response, int $id, PDO $pdo): Response
+    {
+        $q = $pdo->prepare('DELETE FROM time_periods WHERE id = ?');
+        $q->execute([$id]);
+
+        return $this->json($response, [
+            'status' => 'ok',
+        ]);
+    }
+
+    public function edit(Response $response, int $id, PDO $pdo): Response
+    {
+        $validator = new Validator($_POST);
+
+        $validator->rule('required', ['displayName', 'startTime', 'endTime']);
+        $validator->rule('lengthMin', 'displayName', 2);
+
+        if (!$validator->validate()) {
+            return $this->json($response, [
+                'status' => 'error',
+                'errors' => $validator->errors(),
+            ]);
+        }
+
+        $qE = $pdo->prepare('SELECT * FROM time_periods WHERE id = ?');
+        $qE->execute([$id]);
+
+        $en = $qE->fetchAll();
+
+        if (count($en) === 0) {
+            return $this->json($response, [
+                'status' => 'error',
+                'message' => 'Cannot find the specified period',
+            ], 400);
+        }
+
+        $entity = TimePeriod::mapFromArray($_POST);
+        $entity->setId($en[0]['id']);
+
+        $q = $pdo->prepare('UPDATE time_periods SET displayName = ?, startTime = ?, endTime = ? WHERE id = ?');
+        $q->execute([$entity->getDisplayName(), $entity->getStartTimeSerialized(), $entity->getEndTimeSerialized(), $entity->getId()]);
+
+        return $this->json($response, [
+            'status' => 'ok',
         ]);
     }
 }

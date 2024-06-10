@@ -29,7 +29,7 @@ class TimePeriod
     /**
      * @var string[]
      */
-    private array $serializable = ['id', 'displayName', 'startTime', 'endTime'];
+    private array $serializable = ['displayName', 'startTime', 'endTime'];
 
     private int $id;
 

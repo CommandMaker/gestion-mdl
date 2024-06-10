@@ -46,6 +46,7 @@ trait SerializableEntity
 
                 if (method_exists($this, $methodNameSerialized)) {
                     $serialized[$prop] = $this->$methodNameSerialized();
+
                     continue;
                 }
 

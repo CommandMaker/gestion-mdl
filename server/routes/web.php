@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use App\Http\CardScanController;
 use App\Http\HomeController;
 use App\Http\TimePeriodController;
 use Slim\App;
@@ -27,4 +28,9 @@ return function (App $app): void {
     $app->post('/api/time-periods/new', [TimePeriodController::class, 'create']);
     $app->delete('/api/time-periods/delete/{id}', [TimePeriodController::class, 'delete']);
     $app->post('/api/time-periods/edit/{id}', [TimePeriodController::class, 'edit']);
+
+    $app->post('/api/scans/get', [CardScanController::class, 'getHistoryForTimePeriod']);
+
+    /* Debug route */
+    $app->get('/api/debug', fn () => phpinfo());
 };

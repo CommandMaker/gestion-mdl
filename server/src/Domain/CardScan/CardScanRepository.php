@@ -39,4 +39,11 @@ class CardScanRepository
 
         return array_map(fn ($i) => CardScan::mapFromArray($i), $q->fetchAll());
     }
+
+    public function create(CardScan $cardScan): void
+    {
+        $q = $this->pdo->prepare('INSERT INTO card_scans (code, date, timePeriodId) VALUES (:code, :date, :timePeriodId)');
+        //$q->execute([$cardScan->getCode(), $cardScan->getDateSerialized(), $cardScan->getTimePeriodId()]);
+        $q->execute($cardScan->toArray(['code', 'date', 'timePeriodId']));
+    }
 }

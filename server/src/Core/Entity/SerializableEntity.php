@@ -8,11 +8,12 @@ trait SerializableEntity
      * Return the entity serialized to JSON
      * If no props are specified, it will use the $serializable property of the entity class
      *
+     * @param  bool|null  $merge  If the prop array is merged with the serializable attribute in class
      * @param  string[]|null  $props  The props to serialize
      */
-    public function toJson(?array $props = null): string|false
+    public function toJson(?array $props = null, ?bool $merge = false): string|false
     {
-        return json_encode($this->toArray($props));
+        return json_encode($this->toArray($props, $merge));
     }
 
     /**
@@ -20,27 +21,16 @@ trait SerializableEntity
      * If no props are specified, it will use the $serializable property of the entity class
      *
      * @param  string[]|null  $props  The props to serialize
-     * @return string[] The serialized array
+     * @param bool|null $merge If the prop array is merged with the serializable attribute in class
+
+     * @return array<string, mixed> The serialized array
      */
-    public function toArray(?array $props = null): array
+    public function toArray(?array $props = null, ?bool $merge = false): array
     {
-        if ($props !== null) {
+        if ($props !== null && !$merge) {
             $serialized = [];
 
             foreach ($props as $prop) {
-                $methodName = 'get' . ucfirst(str_replace(' ', '', $prop));
-
-                if (method_exists($this, $methodName)) {
-                    $serialized[$prop] = $this->$methodName();
-                }
-            }
-
-            return $serialized;
-        }
-
-        if (property_exists(self::class, 'serializable')) {
-            $serialized = [];
-            foreach ($this->serializable as $prop) {
                 $methodName = 'get' . ucfirst(str_replace(' ', '', $prop));
                 $methodNameSerialized = $methodName . 'Serialized';
 
@@ -52,6 +42,34 @@ trait SerializableEntity
 
                 if (method_exists($this, $methodName)) {
                     $serialized[$prop] = $this->$methodName();
+                }
+            }
+
+            return $serialized;
+        }
+
+        if (property_exists(self::class, 'serializable')) {
+            $serialized = [];
+
+            $propsToSerialize = $merge ? array_merge($this->serializable, $props ?: []) : $this->serializable;
+
+            foreach ($propsToSerialize as $prop) {
+                $methodName = 'get' . ucfirst(str_replace(' ', '', $prop));
+                $methodNameSerialized = $methodName . 'Serialized';
+
+                if (method_exists($this, $methodNameSerialized)) {
+                    $serialized[$prop] = $this->$methodNameSerialized();
+
+                    continue;
+                }
+
+                if (method_exists($this, $methodName)) {
+                    $serializedProp = $this->$methodName();
+                    if (gettype($serializedProp) === 'object' && method_exists($serializedProp, 'toArray')) {
+                        $serialized[$prop] = $serializedProp->toArray();
+                    } else {
+                        $serialized[$prop] = $serializedProp;
+                    }
                 }
             }
 

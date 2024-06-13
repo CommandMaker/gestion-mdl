@@ -16,20 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Domain\CardScan;
+namespace App\Core\Entity;
 
-use PDO;
-
-class CardScanService
+class AbstractEntity
 {
-    public function __construct(
-        private PDO $pdo
-    ) {
+    use EntityMapper;
+
+    /**
+     * @var array<string, mixed|AbstractEntity>
+     */
+    protected array $relations = [];
+
+    protected function getGetterForProperty(string $property): string
+    {
+        return 'get' . ucfirst(str_replace(' ', '', $property));
     }
 
-    public function create(CardScan $scan): void
+    protected function getSetterForProperty(string $property): string
     {
-        $q = $this->pdo->prepare('INSERT INTO card_scan (code, date) VALUES (?, ?)');
-        $q->execute(array_values($scan->toArray(['code', 'card'])));
+        return 'set' . ucfirst(str_replace(' ', '', $property));
     }
 }

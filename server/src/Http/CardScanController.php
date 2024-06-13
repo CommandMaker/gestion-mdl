@@ -19,6 +19,7 @@
 namespace App\Http;
 
 use App\Core\Http\ControllerTrait;
+use App\Domain\CardScan\CardScan;
 use App\Domain\CardScan\CardScanRepository;
 use DateTimeImmutable;
 use GuzzleHttp\Psr7\Response;
@@ -36,6 +37,13 @@ class CardScanController
             'optional' => ['date'],
         ]);
 
+        if (!$validator->validate()) {
+            return $this->json($response, [
+                'status' => 'error',
+                'message' => $validator->errors(),
+            ]);
+        }
+
         if (!isset($_POST['date'])) {
             $_POST['date'] = (new DateTimeImmutable())->format('Y-m-d');
         }
@@ -45,6 +53,27 @@ class CardScanController
         return $this->json($response, [
             'status' => 'ok',
             'data' => $history,
+        ]);
+    }
+
+    public function create(Response $response, CardScanRepository $repository): Response
+    {
+        $validator = new Validator($_POST);
+        $validator->rules([
+            'required' => ['code', 'date', 'timePeriodId'],
+        ]);
+
+        if (!$validator->validate()) {
+            return $this->json($response, [
+                'status' => 'error',
+                'message' => $validator->errors(),
+            ]);
+        }
+
+        $repository->create(CardScan::mapFromArray($_POST));
+
+        return $this->json($response, [
+            'status' => 'ok',
         ]);
     }
 }

@@ -18,12 +18,15 @@
 
 namespace App\Domain\User;
 
+use App\Core\Entity\AbstractEntity;
 use App\Core\Entity\EntityMapper;
 use App\Core\Entity\SerializableEntity;
 
-class User
+class User extends AbstractEntity
 {
     use EntityMapper, SerializableEntity;
+
+    public static string $tableName = 'users';
 
     /**
      * The props used for serialization

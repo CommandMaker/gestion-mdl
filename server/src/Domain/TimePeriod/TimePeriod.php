@@ -18,13 +18,16 @@
 
 namespace App\Domain\TimePeriod;
 
+use App\Core\Entity\AbstractEntity;
 use App\Core\Entity\EntityMapper;
 use App\Core\Entity\SerializableEntity;
 use DateTimeImmutable;
 
-class TimePeriod
+class TimePeriod extends AbstractEntity
 {
     use EntityMapper, SerializableEntity;
+
+    public static string $tableName = 'time_periods';
 
     /**
      * @var string[]

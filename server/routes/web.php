@@ -30,6 +30,7 @@ return function (App $app): void {
     $app->post('/api/time-periods/edit/{id}', [TimePeriodController::class, 'edit']);
 
     $app->post('/api/scans/get', [CardScanController::class, 'getHistoryForTimePeriod']);
+    $app->post('/api/scans/new', [CardScanController::class, 'create']);
 
     /* Debug route */
     $app->get('/api/debug', fn () => phpinfo());

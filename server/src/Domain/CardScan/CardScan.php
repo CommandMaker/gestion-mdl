@@ -18,18 +18,23 @@
 
 namespace App\Domain\CardScan;
 
+use App\Core\Entity\AbstractEntity;
 use App\Core\Entity\EntityMapper;
+use App\Core\Entity\HasRelations;
 use App\Core\Entity\SerializableEntity;
+use App\Domain\User\User;
 use DateTimeImmutable;
 
-class CardScan
+class CardScan extends AbstractEntity
 {
-    use EntityMapper, SerializableEntity;
+    use EntityMapper, HasRelations, SerializableEntity;
+
+    public static string $tableName = 'card_scans';
 
     /**
      * @var string[]
      */
-    protected array $serializable = ['code', 'date', 'timePeriodId'];
+    protected array $serializable = ['code', 'date', 'timePeriodId', 'user'];
 
     private int $id;
 
@@ -77,7 +82,7 @@ class CardScan
 
     public function getDateSerialized(): string
     {
-        return $this->date->format('d-m-Y');
+        return $this->date->format('Y-m-d');
     }
 
     public function getTimePeriodId(): int
@@ -90,5 +95,11 @@ class CardScan
         $this->timePeriodId = $id;
 
         return $this;
+    }
+
+    public function getUser(): User
+    {
+        /** @phpstan-ignore-next-line */
+        return $this->hasOne(User::class, 'code', 'code');
     }
 }

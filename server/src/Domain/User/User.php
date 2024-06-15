@@ -36,7 +36,7 @@ class User extends AbstractEntity
      *
      * @var string[]
      */
-    protected array $serializable = ['id', 'firstname', 'lastname', 'grade', 'code', 'gender', 'subscriptionType', 'subscriptionEnd', 'subscriptionValidity'];
+    protected array $serializable = ['id', 'firstname', 'lastname', 'grade', 'code', 'gender', 'subscriptionType', 'subscriptionEnd', 'subscriptionValidity', 'isAdmin'];
 
     private int $id;
 
@@ -53,6 +53,8 @@ class User extends AbstractEntity
     private int $subscriptionTypeId = 1;
 
     private ?DateTimeImmutable $subscriptionEnd = null;
+
+    private bool $isAdmin = false;
 
     /**
      * @return array<string, string>
@@ -171,5 +173,17 @@ class User extends AbstractEntity
     public function getSubscriptionValidity(): bool
     {
         return $this->subscriptionTypeId === 1 || ($this->getSubscriptionTypeId() !== 1 && $this->getSubscriptionEnd() !== null && $this->getSubscriptionEnd() > new DateTimeImmutable());
+    }
+
+    public function getIsAdmin(): bool
+    {
+        return $this->isAdmin;
+    }
+
+    public function setIsAdmin(bool $isAdmin): self
+    {
+        $this->isAdmin = $isAdmin;
+
+        return $this;
     }
 }

@@ -23,10 +23,6 @@ use App\Core\Entity\Serializers\DateTimeSerializer;
 
 class PropertySerializer
 {
-    public function __construct()
-    {
-    }
-
     /**
      * @var array<string, class-string>
      */

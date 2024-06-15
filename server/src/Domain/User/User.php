@@ -50,9 +50,19 @@ class User extends AbstractEntity
 
     private string $grade;
 
-    private int $subscriptionTypeId;
+    private int $subscriptionTypeId = 1;
 
     private ?DateTimeImmutable $subscriptionEnd = null;
+
+    /**
+     * @return array<string, string>
+     */
+    protected function cast(): array
+    {
+        return [
+            'subscriptionEnd' => 'datetime:Y-m-d',
+        ];
+    }
 
     public function getId(): int
     {
@@ -156,11 +166,6 @@ class User extends AbstractEntity
         }
 
         return $this;
-    }
-
-    public function getSubscriptionEndSerialized(): ?string
-    {
-        return $this->subscriptionEnd?->format('Y-m-d');
     }
 
     public function getSubscriptionValidity(): bool

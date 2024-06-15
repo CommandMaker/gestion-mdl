@@ -18,12 +18,18 @@
 
 namespace Tests\Unit\Core\Entity;
 
+use App\Bootstrap;
 use App\Domain\TimePeriod\TimePeriod;
 use App\Domain\User\User;
 use PHPUnit\Framework\TestCase;
 
 class SerializableEntityTest extends TestCase
 {
+    public function setUp(): void
+    {
+        Bootstrap::bootApp();
+    }
+
     public function testIfSerializeCorrectlyUsingPropsParam(): void
     {
         $data = [
@@ -38,7 +44,8 @@ class SerializableEntityTest extends TestCase
             ->setLastname('Doe')
             ->setGrade('1°4')
             ->setGender('male')
-            ->setCode('an01');
+            ->setCode('an01')
+            ->setSubscriptionTypeId(1);
 
         $this->assertSame($user->toArray(['id', 'firstname', 'lastname']), $data);
     }
@@ -50,8 +57,14 @@ class SerializableEntityTest extends TestCase
             'firstname' => 'John',
             'lastname' => 'Doe',
             'grade' => '1°4',
-            'gender' => 'male',
             'code' => 'an01',
+            'gender' => 'male',
+            'subscriptionType' => [
+                'id' => 1,
+                'displayName' => 'Annuel',
+            ],
+            'subscriptionEnd' => null,
+            'subscriptionValidity' => true,
         ];
 
         $user = (new User())
@@ -60,18 +73,19 @@ class SerializableEntityTest extends TestCase
             ->setLastname('Doe')
             ->setGrade('1°4')
             ->setGender('male')
-            ->setCode('an01');
+            ->setCode('an01')
+            ->setSubscriptionTypeId(1);
 
-        $this->assertEqualsCanonicalizing($user->toArray(), $data);
+        $this->assertSame($user->toArray(), $data);
     }
 
     public function testIfSerializeCorrectlyUsingSerializedGetter(): void
     {
         $data = [
-            'id' => 1,
             'displayName' => '8h-9h',
             'startTime' => '07:55:00',
             'endTime' => '08:55:00',
+            'id' => 1,
         ];
 
         $timePeriod = (new TimePeriod())
@@ -80,6 +94,6 @@ class SerializableEntityTest extends TestCase
             ->setStartTime('2024-06-10 07:55:00.000000')
             ->setEndTime('2024-06-10 08:55:00.000000');
 
-        $this->assertSame($timePeriod->toArray(), $data);
+        $this->assertSame($timePeriod->toArray(['id'], true), $data);
     }
 }

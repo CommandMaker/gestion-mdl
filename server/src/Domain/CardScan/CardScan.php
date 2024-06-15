@@ -44,6 +44,16 @@ class CardScan extends AbstractEntity
 
     private int $timePeriodId;
 
+    /**
+     * @return array<string, string>
+     */
+    public function casts(): array
+    {
+        return [
+            'date' => 'datetime:Y-m-d',
+        ];
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -78,11 +88,6 @@ class CardScan extends AbstractEntity
         $this->date = new DateTimeImmutable($date);
 
         return $this;
-    }
-
-    public function getDateSerialized(): string
-    {
-        return $this->date->format('Y-m-d');
     }
 
     public function getTimePeriodId(): int

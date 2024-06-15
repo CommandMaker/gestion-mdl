@@ -57,7 +57,7 @@ class TimePeriodController
         $entity = TimePeriod::mapFromArray($_POST);
 
         $q = $pdo->prepare('INSERT INTO time_periods (displayName, startTime, endTime) VALUES (?, ?, ?)');
-        $q->execute([$entity->getDisplayName(), $entity->getStartTimeSerialized(), $entity->getEndTimeSerialized()]);
+        $q->execute([$entity->getDisplayName(), $entity->serialize('startTime'), $entity->serialize('endTime')]);
 
         return $this->json($response, [
             'status' => 'ok',
@@ -105,7 +105,7 @@ class TimePeriodController
         $entity->setId($en[0]['id']);
 
         $q = $pdo->prepare('UPDATE time_periods SET displayName = ?, startTime = ?, endTime = ? WHERE id = ?');
-        $q->execute([$entity->getDisplayName(), $entity->getStartTimeSerialized(), $entity->getEndTimeSerialized(), $entity->getId()]);
+        //$q->execute([$entity->getDisplayName(), $entity->getStartTimeSerialized(), $entity->getEndTimeSerialized(), $entity->getId()]);
 
         return $this->json($response, [
             'status' => 'ok',

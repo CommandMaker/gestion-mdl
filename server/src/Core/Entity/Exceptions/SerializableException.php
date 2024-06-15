@@ -1,5 +1,4 @@
 <?php
-
 /*
  *  Copyright (C) 2024 Command_maker
  *
@@ -16,34 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Core\Entity;
+namespace App\Core\Entity\Exceptions;
 
-use ReflectionClass;
+use Exception;
 
-trait EntityMapper
+class SerializableException extends Exception
 {
-    /**
-     * Create an entity from the specified array
-     *
-     * @param  mixed[]  $data
-     */
-    public static function mapFromArray(array $data): self
-    {
-        $klass = new ReflectionClass(self::class);
-        $entity = $klass->newInstance();
-
-        /**
-         * @var string $key
-         * @var mixed $value
-         */
-        foreach ($data as $key => $value) {
-            $funcName = 'set' . ucfirst(str_replace(' ', '', $key));
-
-            if ($klass->hasMethod($funcName)) {
-                $entity->$funcName($value);
-            }
-        }
-
-        return $entity;
-    }
 }

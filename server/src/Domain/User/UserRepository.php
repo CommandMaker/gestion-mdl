@@ -48,7 +48,7 @@ class UserRepository
             $user->getCode(),
             $user->getGrade(),
             $user->getSubscriptionTypeId(),
-            $user->getSubscriptionEndSerialized(),
+            $user->serialize('subscriptionEnd'),
         ]);
     }
 
@@ -62,7 +62,7 @@ class UserRepository
             $user->getCode(),
             $user->getGrade(),
             $user->getSubscriptionTypeId(),
-            $user->getSubscriptionEndSerialized(),
+            $user->serialize('subscriptionEnd'),
             $user->getId(),
         ]);
     }

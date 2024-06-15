@@ -27,6 +27,11 @@ class AbstractEntity
      */
     protected array $relations = [];
 
+    /**
+     * @var string[]
+     */
+    protected array $serializable = [];
+
     protected function getGetterForProperty(string $property): string
     {
         return 'get' . ucfirst(str_replace(' ', '', $property));
@@ -35,5 +40,18 @@ class AbstractEntity
     protected function getSetterForProperty(string $property): string
     {
         return 'set' . ucfirst(str_replace(' ', '', $property));
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    protected function cast(): array
+    {
+        return [];
+    }
+
+    public function serialize(string $s): string
+    {
+        return $s;
     }
 }

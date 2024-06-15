@@ -32,7 +32,7 @@ class TimePeriod extends AbstractEntity
     /**
      * @var string[]
      */
-    private array $serializable = ['displayName', 'startTime', 'endTime'];
+    protected array $serializable = ['displayName', 'startTime', 'endTime'];
 
     private int $id;
 
@@ -41,6 +41,17 @@ class TimePeriod extends AbstractEntity
     private DateTimeImmutable $startTime;
 
     private DateTimeImmutable $endTime;
+
+    /**
+     * @return array<string, string>
+     */
+    protected function cast(): array
+    {
+        return [
+            'startTime' => 'datetime:H:i:s',
+            'endTime' => 'datetime:H:i:s',
+        ];
+    }
 
     public function getId(): int
     {
@@ -78,11 +89,6 @@ class TimePeriod extends AbstractEntity
         return $this;
     }
 
-    public function getStartTimeSerialized(): string
-    {
-        return $this->startTime->format('H:i:s');
-    }
-
     public function getEndTime(): DateTimeImmutable
     {
         return $this->endTime;
@@ -93,10 +99,5 @@ class TimePeriod extends AbstractEntity
         $this->endTime = new DateTimeImmutable($endTime);
 
         return $this;
-    }
-
-    public function getEndTimeSerialized(): string
-    {
-        return $this->endTime->format('H:i:s');
     }
 }

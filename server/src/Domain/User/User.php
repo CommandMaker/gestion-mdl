@@ -20,11 +20,14 @@ namespace App\Domain\User;
 
 use App\Core\Entity\AbstractEntity;
 use App\Core\Entity\EntityMapper;
+use App\Core\Entity\HasRelations;
 use App\Core\Entity\SerializableEntity;
+use App\Domain\SubscriptionType\SubscriptionType;
+use DateTimeImmutable;
 
 class User extends AbstractEntity
 {
-    use EntityMapper, SerializableEntity;
+    use EntityMapper, HasRelations, SerializableEntity;
 
     public static string $tableName = 'users';
 
@@ -33,7 +36,7 @@ class User extends AbstractEntity
      *
      * @var string[]
      */
-    protected array $serializable = ['id', 'firstname', 'lastname', 'grade', 'code', 'gender'];
+    protected array $serializable = ['id', 'firstname', 'lastname', 'grade', 'code', 'gender', 'subscriptionType', 'subscriptionEnd', 'subscriptionValidity'];
 
     private int $id;
 
@@ -46,6 +49,10 @@ class User extends AbstractEntity
     private string $code;
 
     private string $grade;
+
+    private int $subscriptionTypeId;
+
+    private ?DateTimeImmutable $subscriptionEnd = null;
 
     public function getId(): int
     {
@@ -117,5 +124,47 @@ class User extends AbstractEntity
         $this->grade = $grade;
 
         return $this;
+    }
+
+    public function getSubscriptionTypeId(): int
+    {
+        return $this->subscriptionTypeId;
+    }
+
+    public function setSubscriptionTypeId(int $id): self
+    {
+        $this->subscriptionTypeId = $id;
+
+        return $this;
+    }
+
+    public function getSubscriptionType(): SubscriptionType
+    {
+        /** @phpstan-ignore-next-line */
+        return $this->hasOne(SubscriptionType::class, 'subscriptionTypeId');
+    }
+
+    public function getSubscriptionEnd(): ?DateTimeImmutable
+    {
+        return $this->subscriptionEnd;
+    }
+
+    public function setSubscriptionEnd(?string $end): self
+    {
+        if ($end !== null && $end !== 'null') {
+            $this->subscriptionEnd = new DateTimeImmutable($end);
+        }
+
+        return $this;
+    }
+
+    public function getSubscriptionEndSerialized(): ?string
+    {
+        return $this->subscriptionEnd?->format('Y-m-d');
+    }
+
+    public function getSubscriptionValidity(): bool
+    {
+        return $this->subscriptionTypeId === 1 || ($this->getSubscriptionTypeId() !== 1 && $this->getSubscriptionEnd() !== null && $this->getSubscriptionEnd() > new DateTimeImmutable());
     }
 }

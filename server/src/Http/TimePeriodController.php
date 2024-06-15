@@ -51,7 +51,7 @@ class TimePeriodController
             return $this->json($response, [
                 'status' => 'error',
                 'errors' => $validator->errors(),
-            ]);
+            ], 400);
         }
 
         $entity = TimePeriod::mapFromArray($_POST);
@@ -86,7 +86,7 @@ class TimePeriodController
             return $this->json($response, [
                 'status' => 'error',
                 'errors' => $validator->errors(),
-            ]);
+            ], 400);
         }
 
         $qE = $pdo->prepare('SELECT * FROM time_periods WHERE id = ?');

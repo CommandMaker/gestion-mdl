@@ -34,13 +34,13 @@ trait SerializableEntity
                 $methodName = 'get' . ucfirst(str_replace(' ', '', $prop));
                 $methodNameSerialized = $methodName . 'Serialized';
 
-                if (method_exists($this, $methodNameSerialized)) {
+                if (method_exists($this, $methodNameSerialized) && (isset($this->$prop) || isset($this->relations[$prop . 'Relation']))) {
                     $serialized[$prop] = $this->$methodNameSerialized();
 
                     continue;
                 }
 
-                if (method_exists($this, $methodName)) {
+                if (method_exists($this, $methodName) && (isset($this->$prop) || isset($this->relations[$prop . 'Relation']))) {
                     $serialized[$prop] = $this->$methodName();
                 }
             }

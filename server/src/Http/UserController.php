@@ -19,48 +19,34 @@
 namespace App\Http;
 
 use App\Core\Http\ControllerTrait;
-use App\Domain\CardScan\CardScan;
-use App\Domain\CardScan\CardScanRepository;
-use DateTimeImmutable;
+use App\Domain\User\User;
+use App\Domain\User\UserRepository;
 use GuzzleHttp\Psr7\Response;
 use Valitron\Validator;
 
-class CardScanController
+class UserController
 {
     use ControllerTrait;
 
-    public function getHistoryForTimePeriod(Response $response, CardScanRepository $repository): Response
+    public function __construct(
+        private UserRepository $repository
+    ) {
+    }
+
+    public function all(Response $response): Response
     {
-        $validator = new Validator($_POST);
-        $validator->rules([
-            'required' => ['timePeriodId'],
-            'optional' => ['date'],
-        ]);
-
-        if (!$validator->validate()) {
-            return $this->json($response, [
-                'status' => 'error',
-                'message' => $validator->errors(),
-            ], 400);
-        }
-
-        if (!isset($_POST['date'])) {
-            $_POST['date'] = (new DateTimeImmutable())->format('Y-m-d');
-        }
-
-        $history = $repository->all($_POST['date'], $_POST['timePeriodId']);
-
         return $this->json($response, [
             'status' => 'ok',
-            'data' => $history,
+            'data' => $this->repository->all(),
         ]);
     }
 
-    public function create(Response $response, CardScanRepository $repository): Response
+    public function edit(Response $response, int $id, UserRepository $userRepository): Response
     {
         $validator = new Validator($_POST);
         $validator->rules([
-            'required' => ['code', 'date', 'timePeriodId'],
+            'required' => ['firstname', 'lastname', 'gender', 'code', 'grade', 'subscriptionTypeId'],
+            'optional' => ['subscriptionEnd'],
         ]);
 
         if (!$validator->validate()) {
@@ -70,7 +56,9 @@ class CardScanController
             ], 400);
         }
 
-        $repository->create(CardScan::mapFromArray($_POST));
+        $_POST['id'] = $id;
+        $user = User::mapFromArray($_POST);
+        $userRepository->edit($user);
 
         return $this->json($response, [
             'status' => 'ok',

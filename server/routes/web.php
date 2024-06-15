@@ -18,7 +18,9 @@
 
 use App\Http\CardScanController;
 use App\Http\HomeController;
+use App\Http\SubscriptionTypeController;
 use App\Http\TimePeriodController;
+use App\Http\UserController;
 use Slim\App;
 
 return function (App $app): void {
@@ -31,6 +33,13 @@ return function (App $app): void {
 
     $app->post('/api/scans/get', [CardScanController::class, 'getHistoryForTimePeriod']);
     $app->post('/api/scans/new', [CardScanController::class, 'create']);
+
+    $app->get('/api/subscription-types/all', [SubscriptionTypeController::class, 'all']);
+    $app->post('/api/subscription-types/new', [SubscriptionTypeController::class, 'create']);
+    $app->post('/api/subscription-types/edit/{id}', [SubscriptionTypeController::class, 'edit']);
+
+    $app->get('/api/users/all', [UserController::class, 'all']);
+    $app->post('/api/users/edit/{id}', [UserController::class, 'edit']);
 
     /* Debug route */
     $app->get('/api/debug', fn () => phpinfo());

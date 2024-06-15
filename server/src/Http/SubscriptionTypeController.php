@@ -19,58 +19,65 @@
 namespace App\Http;
 
 use App\Core\Http\ControllerTrait;
-use App\Domain\CardScan\CardScan;
-use App\Domain\CardScan\CardScanRepository;
-use DateTimeImmutable;
+use App\Domain\SubscriptionType\SubscriptionType;
+use App\Domain\SubscriptionType\SubscriptionTypeRepository;
 use GuzzleHttp\Psr7\Response;
 use Valitron\Validator;
 
-class CardScanController
+class SubscriptionTypeController
 {
     use ControllerTrait;
 
-    public function getHistoryForTimePeriod(Response $response, CardScanRepository $repository): Response
+    public function __construct(
+        private SubscriptionTypeRepository $repository
+    ) {
+    }
+
+    public function all(Response $response): Response
     {
-        $validator = new Validator($_POST);
-        $validator->rules([
-            'required' => ['timePeriodId'],
-            'optional' => ['date'],
-        ]);
-
-        if (!$validator->validate()) {
-            return $this->json($response, [
-                'status' => 'error',
-                'message' => $validator->errors(),
-            ], 400);
-        }
-
-        if (!isset($_POST['date'])) {
-            $_POST['date'] = (new DateTimeImmutable())->format('Y-m-d');
-        }
-
-        $history = $repository->all($_POST['date'], $_POST['timePeriodId']);
-
         return $this->json($response, [
             'status' => 'ok',
-            'data' => $history,
+            'data' => $this->repository->all(),
         ]);
     }
 
-    public function create(Response $response, CardScanRepository $repository): Response
+    public function create(Response $response): Response
     {
         $validator = new Validator($_POST);
         $validator->rules([
-            'required' => ['code', 'date', 'timePeriodId'],
+            'required' => ['displayName'],
         ]);
 
         if (!$validator->validate()) {
             return $this->json($response, [
                 'status' => 'error',
-                'message' => $validator->errors(),
+                'messages' => $validator->errors(),
             ], 400);
         }
 
-        $repository->create(CardScan::mapFromArray($_POST));
+        $this->repository->create(SubscriptionType::mapFromArray($_POST));
+
+        return $this->json($response, [
+            'status' => 'ok',
+        ]);
+    }
+
+    public function edit(Response $response, int $id): Response
+    {
+        $validator = new Validator($_POST);
+        $validator->rules([
+            'required' => ['displayName'],
+        ]);
+
+        if (!$validator->validate()) {
+            return $this->json($response, [
+                'status' => 'error',
+                'messages' => $validator->errors(),
+            ], 400);
+        }
+
+        $_POST['id'] = $id;
+        $this->repository->edit(SubscriptionType::mapFromArray($_POST));
 
         return $this->json($response, [
             'status' => 'ok',

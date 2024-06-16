@@ -14,12 +14,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import ReactDOM from 'react-dom/client';
+import React from 'react';
+import Style from './Dashboard.module.scss';
 
-import './scss/app.scss';
-import { RouterProvider } from 'react-router-dom';
-import { router } from './router';
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-    <RouterProvider router={router} />
-);
+export const Dashboard = (): React.ReactElement => {
+    return <aside>Dashboard</aside>;
+};

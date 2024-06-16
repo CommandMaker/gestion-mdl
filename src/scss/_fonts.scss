@@ -14,12 +14,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import ReactDOM from 'react-dom/client';
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('./fonts/Inter-SemiBold.ttf') format('ttf');
+}
 
-import './scss/app.scss';
-import { RouterProvider } from 'react-router-dom';
-import { router } from './router';
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('./fonts/Inter-Bold.ttf') format('ttf');
+}
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-    <RouterProvider router={router} />
-);
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('./fonts/Inter-Regular.ttf') format('ttf');
+}

@@ -14,12 +14,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import ReactDOM from 'react-dom/client';
+import { createBrowserRouter } from 'react-router-dom';
+import { BasePage } from './ui/Pages/BasePage';
+import { ScanPage } from './ui/Pages/ScanPage';
 
-import './scss/app.scss';
-import { RouterProvider } from 'react-router-dom';
-import { router } from './router';
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-    <RouterProvider router={router} />
-);
+export const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <BasePage />,
+        children: [
+            {
+                path: '/',
+                element: <ScanPage />
+            }
+        ]
+    }
+]);

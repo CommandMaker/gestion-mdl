@@ -14,12 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import ReactDOM from 'react-dom/client';
+import React from 'react';
 
-import './scss/app.scss';
-import { RouterProvider } from 'react-router-dom';
-import { router } from './router';
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-    <RouterProvider router={router} />
-);
+export const ScanPage = (): React.ReactElement => {
+    return <h1>Entrées du foyer</h1>;
+};

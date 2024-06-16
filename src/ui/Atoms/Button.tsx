@@ -13,13 +13,3 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-import ReactDOM from 'react-dom/client';
-
-import './scss/app.scss';
-import { RouterProvider } from 'react-router-dom';
-import { router } from './router';
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-    <RouterProvider router={router} />
-);

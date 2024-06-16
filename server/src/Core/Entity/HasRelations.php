@@ -56,4 +56,37 @@ trait HasRelations
         /** @var AbstractEntity */
         return $this->relations[$relationKey];
     }
+
+    /**
+     * @param  class-string<AbstractEntity>  $entityClass
+     * @return AbstractEntity[]
+     */
+    public function hasMany(string $entityClass, string $foreignKey, string $localKey = 'id'): array
+    {
+        $relationKey = $foreignKey . 'Relation';
+        if (isset($this->relations[$relationKey])) {
+            /** @var AbstractEntity[] */
+            return $this->relations[$relationKey];
+        }
+
+        /** @var PDO */
+        $pdo = Bootstrap::getContainerService(PDO::class);
+        $tableName = $entityClass::$tableName;
+        $getter = $this->getGetterForProperty($localKey);
+        $d = $this->$getter();
+        $q = $pdo->prepare("SELECT * FROM $tableName WHERE $foreignKey = '$d'");
+        $q->execute();
+        /** @var array<array<string, mixed>> */
+        $result = $q->fetchAll();
+
+        $reflection = new ReflectionClass($entityClass);
+        if (!$reflection->hasMethod('mapFromArray')) {
+            throw new Exception('The target entity must have the "EntityMapper" trait.');
+        }
+
+        $this->relations[$relationKey] = array_map(fn ($el) => $entityClass::mapFromArray($el), $result);
+
+        /** @var AbstractEntity[] */
+        return $this->relations[$relationKey];
+    }
 }

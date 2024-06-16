@@ -22,6 +22,7 @@ use App\Core\Entity\AbstractEntity;
 use App\Core\Entity\EntityMapper;
 use App\Core\Entity\HasRelations;
 use App\Core\Entity\SerializableEntity;
+use App\Domain\Sanction\Sanction;
 use App\Domain\SubscriptionType\SubscriptionType;
 use DateTimeImmutable;
 
@@ -185,5 +186,14 @@ class User extends AbstractEntity
         $this->isAdmin = $isAdmin;
 
         return $this;
+    }
+
+    /**
+     * @return Sanction[]
+     */
+    public function getSanctions(): array
+    {
+        /** @phpstan-ignore-next-line */
+        return $this->hasMany(Sanction::class, 'targetId');
     }
 }

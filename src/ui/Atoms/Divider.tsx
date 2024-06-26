@@ -14,22 +14,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-:root {
-    /* Colors */
-    --white-1: #f0f0f3;
-    --white-2: #eee;
+import React from 'react';
+import Styles from './Divider.module.scss';
 
-    --blue-gray-400: #728ab7;
-    --blue-gray-700: #2b3951;
+type DividerProps = {
+    /**
+     * Direction of the divider (default = 'horizontal')
+     */
+    direction?: 'horizontal' | 'vertical';
 
-    --red-700: #a33d3d;
+    /**
+     * Margin of the divider (default = '2rem')
+     */
+    margin?: number|string;
+}
 
-    --shadow-dark: rgba(174, 174, 192, 0.4);
-    --shadow-dark-inset: rgba(174, 174, 192, 0.2);
-    --shadow-light: rgba(255, 255, 255, 0.7);
-    --shadow-light-full: #fff;
-
-    /* Texts */
-    --font-family: 'Inter', sans-serif;
-    --font-size: 16px;
+export const Divider = ({direction = 'horizontal', margin = '2rem'}: DividerProps): React.ReactElement => {
+    return <div className={direction === 'vertical' ? Styles.VerticalDivider : Styles.HorizontalDivider} style={{margin: margin}}></div>;
 }

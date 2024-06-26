@@ -14,22 +14,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-:root {
-    /* Colors */
-    --white-1: #f0f0f3;
-    --white-2: #eee;
+.VerticalDivider {
+    width: 2px;
+    height: 80%;
+    background: var(--blue-gray-400);
+}
 
-    --blue-gray-400: #728ab7;
-    --blue-gray-700: #2b3951;
-
-    --red-700: #a33d3d;
-
-    --shadow-dark: rgba(174, 174, 192, 0.4);
-    --shadow-dark-inset: rgba(174, 174, 192, 0.2);
-    --shadow-light: rgba(255, 255, 255, 0.7);
-    --shadow-light-full: #fff;
-
-    /* Texts */
-    --font-family: 'Inter', sans-serif;
-    --font-size: 16px;
+.HorizontalDivider {
+    width: 80%;
+    height: 2px;
+    background: var(--blue-gray-400);
 }

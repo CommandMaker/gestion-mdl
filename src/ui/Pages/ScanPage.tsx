@@ -14,8 +14,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { HourSelector } from '../Organisms/HourSelector';
+import { TimePeriod } from '../../types/server/time_period';
+import { API_URL } from '../../types/constants';
 
 export const ScanPage = (): React.ReactElement => {
-    return <h1>Entrées du foyer</h1>;
+    const [hours, setHours] = useState<TimePeriod[]>([]);
+    const [selectedHour, setSelectedHour] = useState<number>();
+
+    useEffect(() => {
+        (async () => {
+            const req = await fetch(`${API_URL}/api/time-periods/all`);
+
+            if (req.status !== 200) throw new Error(req.statusText);
+
+            const data = await req.json();
+
+            setHours(data.data);
+            setSelectedHour(data.data[0].id);
+        })();
+    }, []);
+
+    return (
+        <main>
+            <h1>Entrées du foyer</h1>
+
+            <HourSelector
+                name="hours"
+                data={hours}
+                onChange={e => setSelectedHour(+e.target.value)}
+            />
+        </main>
+    );
 };

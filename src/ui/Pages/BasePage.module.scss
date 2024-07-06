@@ -20,10 +20,4 @@
     grid-template-columns: 360px 1fr;
     overflow-y: hidden;
     gap: 3rem;
-    
-}
-
-.GridContainer::after {
-    content: '';
-    
 }

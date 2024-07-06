@@ -18,7 +18,7 @@ trait ControllerTrait
 
         $response->getBody()->write(json_encode($this->serializeObject($data)) ?: '');
 
-        return $response->withStatus($status)->withHeader('Content-Type', 'application/json');
+        return $response->withStatus($status)->withHeader('Content-Type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');
     }
 
     /**

@@ -20,12 +20,13 @@ $border-radius: 50px;
     width: 350px;
     height: calc(100vh - 20px);
     margin: 10px 0 0 10px;
-    padding: 58px 35px;
     position: relative;
 
     background: var(--white-1);
     border-radius: $border-radius;
-    box-shadow: 3px 3px 4px var(--shadow-dark), -3px -3px 4px var(--shadow-light-full);
+    box-shadow:
+        3px 3px 4px var(--shadow-dark),
+        -3px -3px 4px var(--shadow-light-full);
 
     display: flex;
     flex-direction: column;
@@ -41,7 +42,9 @@ $border-radius: 50px;
     background: var(--white-2);
     border-radius: $border-radius;
 
-    box-shadow: inset -3px -3px 4px var(--shadow-light), inset 3px 3px 4px var(--shadow-dark);
+    box-shadow:
+        inset -3px -3px 4px var(--shadow-light),
+        inset 3px 3px 4px var(--shadow-dark);
 }
 
 .Title {
@@ -60,5 +63,5 @@ $border-radius: 50px;
 }
 
 .ButtonList p {
-    font-size: 0.90rem;
+    font-size: 0.9rem;
 }

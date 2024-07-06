@@ -32,7 +32,7 @@ class TimePeriodController
     {
         $q = $pdo->prepare('SELECT * from time_periods');
         $q->execute();
-        $data = array_map(fn ($a) => TimePeriod::mapFromArray($a)->toArray(), $q->fetchAll());
+        $data = array_map(fn ($a) => TimePeriod::mapFromArray($a)->toArray(['id'], true), $q->fetchAll());
 
         return $this->json($response, [
             'status' => 'ok',

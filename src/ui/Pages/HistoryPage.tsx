@@ -14,24 +14,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { createBrowserRouter } from 'react-router-dom';
-import { BasePage } from './ui/Pages/BasePage';
-import { ScanPage } from './ui/Pages/ScanPage';
-import { HistoryPage } from './ui/Pages/HistoryPage';
+import React from 'react';
 
-export const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <BasePage />,
-        children: [
-            {
-                path: '/',
-                element: <ScanPage />
-            },
-            {
-                path: '/history',
-                element: <HistoryPage />
-            }
-        ]
-    }
-]);
+export const HistoryPage = (): React.ReactElement => {
+    return (
+        <main>
+            <h1></h1>
+        </main>
+    );
+};

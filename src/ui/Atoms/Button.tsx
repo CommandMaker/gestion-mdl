@@ -52,9 +52,22 @@ type ButtonProps = {
     selected?: boolean;
 };
 
-export const Button = ({onClick, title, label, selected, icon}: ButtonProps): React.ReactElement => {
-    return <button className={`${Styles.Button} ${selected ? Styles.Selected : ''}`} title={title} onClick={onClick}>
-        <p>{ icon } { label }</p>
-    </button>
-
-}
+export const Button = ({
+    onClick,
+    title,
+    label,
+    selected,
+    icon
+}: ButtonProps): React.ReactElement => {
+    return (
+        <button
+            className={`${Styles.Button} ${selected ? Styles.Selected : ''}`}
+            title={title}
+            onClick={onClick}
+        >
+            <p>
+                {icon} {label}
+            </p>
+        </button>
+    );
+};

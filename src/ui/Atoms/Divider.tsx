@@ -26,9 +26,21 @@ type DividerProps = {
     /**
      * Margin of the divider (default = '2rem')
      */
-    margin?: number|string;
-}
+    margin?: number | string;
+};
 
-export const Divider = ({direction = 'horizontal', margin = '2rem'}: DividerProps): React.ReactElement => {
-    return <div className={direction === 'vertical' ? Styles.VerticalDivider : Styles.HorizontalDivider} style={{margin: margin}}></div>;
-}
+export const Divider = ({
+    direction = 'horizontal',
+    margin = '2rem'
+}: DividerProps): React.ReactElement => {
+    return (
+        <div
+            className={
+                direction === 'vertical'
+                    ? Styles.VerticalDivider
+                    : Styles.HorizontalDivider
+            }
+            style={{ margin: margin }}
+        ></div>
+    );
+};

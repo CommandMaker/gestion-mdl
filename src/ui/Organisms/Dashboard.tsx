@@ -17,31 +17,89 @@
 import React from 'react';
 import Styles from './Dashboard.module.scss';
 import { Button } from '../Atoms/Button';
-import { ChartLineUpIcon, ClockIcon, GavelIcon, ScannerTouchScreenIcon, SignatureIcon, UsersIcon } from '../Atoms/Icons/Icons';
+import {
+    ChartLineUpIcon,
+    ClockIcon,
+    GavelIcon,
+    ScannerTouchScreenIcon,
+    SignatureIcon,
+    UsersIcon
+} from '../Atoms/Icons/Icons';
 import { Divider } from '../Atoms/Divider';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const Dashboard = (): React.ReactElement => {
-    return <aside className={Styles.Container}>
-        <h2 className={Styles.Title}>MDL Beaussier</h2>
+    const { pathname: location } = useLocation();
+    const navigate = useNavigate();
 
-        <ul className={Styles.ButtonList}>
-            <Button label="Entrées cette heure-ci" onClick={console.log} selected icon={<ScannerTouchScreenIcon />} />
-            <Button label="Historique des entrées" href="https://archlinux.org" onClick={console.log} icon={<ClockIcon />} />
-        </ul>
+    return (
+        <aside className={Styles.Container}>
+            <div
+                style={{
+                    overflowY: 'auto',
+                    padding: '48px 25px',
+                    width: 'calc(100% - 20px)',
+                    height: 'calc(100vh - 40px)',
+                    marginTop: '10px'
+                }}
+            >
+                <h2 className={Styles.Title}>MDL Beaussier</h2>
 
-        <Divider />
+                <ul className={Styles.ButtonList}>
+                    <Button
+                        label="Entrées cette heure-ci"
+                        onClick={() => navigate('/')}
+                        selected={location === '/'}
+                        icon={<ScannerTouchScreenIcon />}
+                    />
+                    <Button
+                        label="Historique des entrées"
+                        onClick={() => navigate('/history')}
+                        selected={location === '/history'}
+                        icon={<ClockIcon />}
+                    />
+                </ul>
 
-        <ul className={Styles.ButtonList}>
-            <Button label="Adhérents" onClick={() => {}} icon={<UsersIcon />} />
-            <Button label="Sanctions" onClick={() => {}} icon={<GavelIcon />} />
-        </ul>
+                <Divider />
 
-        <Divider />
+                <ul className={Styles.ButtonList}>
+                    <Button
+                        label="Adhérents"
+                        onClick={() => {}}
+                        icon={<UsersIcon />}
+                        selected={location === '/adherents'}
+                    />
+                    <Button
+                        label="Sanctions"
+                        onClick={() => {}}
+                        icon={<GavelIcon />}
+                        selected={location === '/sanctions'}
+                    />
+                </ul>
 
-        <ul className={Styles.ButtonList}>
-            <Button label="Statistiques" onClick={() => {}} icon={<ChartLineUpIcon />} />
-            <Button label="Historique des ouvertures" onClick={() => {}} icon={<SignatureIcon />} />
-            <Button label="Horaires" onClick={() => {}} icon={<SignatureIcon />} />
-        </ul>
-    </aside>;
+                <Divider />
+
+                <ul className={Styles.ButtonList}>
+                    <Button
+                        label="Statistiques"
+                        onClick={() => {}}
+                        icon={<ChartLineUpIcon />}
+                        selected={location === '/stats'}
+                    />
+                    <Button
+                        label="Historique des ouvertures"
+                        onClick={() => {}}
+                        icon={<SignatureIcon />}
+                        selected={location === '/opens'}
+                    />
+                    <Button
+                        label="Horaires"
+                        onClick={() => {}}
+                        icon={<SignatureIcon />}
+                        selected={location === 'hours'}
+                    />
+                </ul>
+            </div>
+        </aside>
+    );
 };

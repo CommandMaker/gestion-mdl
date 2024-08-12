@@ -20,4 +20,5 @@ use App\Bootstrap;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+header('Access-Control-Allow-Origin: *');
 Bootstrap::bootApp();

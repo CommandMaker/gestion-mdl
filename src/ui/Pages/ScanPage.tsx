@@ -18,10 +18,14 @@ import React, { useEffect, useState } from 'react';
 import { HourSelector } from '../Organisms/HourSelector';
 import { TimePeriod } from '../../types/server/time_period';
 import { API_URL } from '../../types/constants';
+import { CardScan } from '../../types/server/card_scan';
+import { SortableTable } from '~/ui/Organisms/SortableTable';
+import { UserSubscriptionTag } from '~/ui/Atoms/UserSubscriptionTag';
 
 export const ScanPage = (): React.ReactElement => {
     const [hours, setHours] = useState<TimePeriod[]>([]);
     const [selectedHour, setSelectedHour] = useState<number>();
+    const [history, setHistory] = useState<CardScan[]>([]);
 
     useEffect(() => {
         (async () => {
@@ -36,6 +40,33 @@ export const ScanPage = (): React.ReactElement => {
         })();
     }, []);
 
+    /**
+     * Refetch the history when time period is edited
+     */
+    useEffect(() => {
+        if (selectedHour === 0 || selectedHour === undefined) return;
+
+        (async () => {
+            const reqData = new FormData();
+            reqData.append('timePeriodId', selectedHour.toString());
+            reqData.append('date', '2024-08-03');
+
+            const historyReq = await fetch(`${API_URL}/api/scans/get`, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json'
+                },
+                body: reqData
+            });
+
+            const data = await historyReq.json();
+
+            if (data.status !== 'ok') throw new Error(historyReq.statusText);
+
+            setHistory(data.data);
+        })();
+    }, [selectedHour]);
+
     return (
         <main>
             <h1>Entrées du foyer</h1>
@@ -44,6 +75,46 @@ export const ScanPage = (): React.ReactElement => {
                 name="hours"
                 data={hours}
                 onChange={e => setSelectedHour(+e.target.value)}
+            />
+
+            <SortableTable
+                data={history}
+                stripped
+                columns={[
+                    {
+                        label: 'Code',
+                        key: 'code',
+                        sortable: true,
+                        sortFunction: (a, b) =>
+                            +((a as string).match(/\d+/) || 0) <
+                            +((b as string).match(/\d+/) || 0)
+                                ? -1
+                                : 1,
+                        width: '150px'
+                    },
+                    {
+                        label: 'Nom',
+                        key: 'user.lastname',
+                        sortable: true
+                    },
+                    {
+                        label: 'Prénom',
+                        key: 'user.firstname',
+                        sortable: true
+                    },
+                    {
+                        label: 'Classe',
+                        key: 'user.grade'
+                    },
+                    {
+                        label: 'Abonnement',
+                        key: 'user.subscriptionType.displayName',
+                        width: '150px',
+                        renderElement: (row: CardScan) => (
+                            <UserSubscriptionTag user={row.user} />
+                        )
+                    }
+                ]}
             />
         </main>
     );

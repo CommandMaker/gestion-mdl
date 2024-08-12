@@ -14,28 +14,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-:root {
-    /* Colors */
-    --white-1: #f0f0f3;
-    --white-2: #eee;
+export const getNestedProp = (
+    obj: { [key: string]: string | number | boolean | object },
+    key: string
+): string | number | boolean | object | undefined => {
+    const keys = key.split('.');
 
-    --blue-gray-400: #728ab7;
-    --blue-gray-700: #2b3951;
-
-    --gray-400: #d2e2ff;
-    --gray-400-rgb: 210, 226, 255;
-
-    --red-700: #a33d3d;
-    --red-400: #fb7575;
-    --red-200: #ffc8c8;
-    --red-200-rgb: 255, 200, 200;
-
-    --shadow-dark: rgba(174, 174, 192, 0.4);
-    --shadow-dark-inset: rgba(174, 174, 192, 0.2);
-    --shadow-light: rgba(255, 255, 255, 0.7);
-    --shadow-light-full: #fff;
-
-    /* Texts */
-    --font-family: 'Inter', sans-serif;
-    --font-size: 16px;
-}
+    for (const k of keys) {
+        if (keys.indexOf(k) !== keys.length - 1) {
+            return getNestedProp(
+                obj[k] as { [key: string]: string | number | boolean | object },
+                keys.slice(keys.indexOf(k) + 1).join('.')
+            );
+        } else {
+            return obj[k];
+        }
+    }
+};

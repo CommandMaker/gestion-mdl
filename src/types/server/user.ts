@@ -14,28 +14,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-:root {
-    /* Colors */
-    --white-1: #f0f0f3;
-    --white-2: #eee;
-
-    --blue-gray-400: #728ab7;
-    --blue-gray-700: #2b3951;
-
-    --gray-400: #d2e2ff;
-    --gray-400-rgb: 210, 226, 255;
-
-    --red-700: #a33d3d;
-    --red-400: #fb7575;
-    --red-200: #ffc8c8;
-    --red-200-rgb: 255, 200, 200;
-
-    --shadow-dark: rgba(174, 174, 192, 0.4);
-    --shadow-dark-inset: rgba(174, 174, 192, 0.2);
-    --shadow-light: rgba(255, 255, 255, 0.7);
-    --shadow-light-full: #fff;
-
-    /* Texts */
-    --font-family: 'Inter', sans-serif;
-    --font-size: 16px;
-}
+export type User = {
+    id: number;
+    firstname: string;
+    lastname: string;
+    grade: string;
+    code: string;
+    gender: string;
+    subscriptionType: { id: number; displayName: string };
+    subscriptionEnd: string;
+    subscriptionValidity: boolean;
+};

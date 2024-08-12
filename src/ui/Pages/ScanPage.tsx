@@ -46,8 +46,9 @@ export const ScanPage = (): React.ReactElement => {
 
         (async () => {
             const reqData = new FormData();
+            const date = new Date();
             reqData.append('timePeriodId', selectedHour.toString());
-            reqData.append('date', '2024-08-03');
+            reqData.append('date', `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`);
 
             const historyReq = await fetch(`${API_URL}/api/scans/get`, {
                 method: 'POST',

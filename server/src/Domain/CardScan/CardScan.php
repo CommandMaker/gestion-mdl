@@ -47,7 +47,7 @@ class CardScan extends AbstractEntity
     /**
      * @return array<string, string>
      */
-    public function casts(): array
+    public function cast(): array
     {
         return [
             'date' => 'datetime:Y-m-d',

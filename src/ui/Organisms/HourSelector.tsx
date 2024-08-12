@@ -14,10 +14,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import Styles from './HourSelector.module.scss';
-import { TextRadio } from '../Atoms/TextRadio';
-import { TimePeriod } from '../../types/server/time_period';
+import { TextRadio } from '~/ui/Atoms';
+import { TimePeriod } from '~/types/server';
 
 type HourSelectorProps = {
     /**
@@ -36,7 +36,7 @@ type HourSelectorProps = {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export const HourSelector = ({
+export const HourSelector = memo(({
     name,
     data,
     onChange
@@ -69,4 +69,4 @@ export const HourSelector = ({
             {populate()}
         </div>
     );
-};
+});

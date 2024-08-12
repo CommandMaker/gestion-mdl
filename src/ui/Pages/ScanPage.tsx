@@ -14,13 +14,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useState } from 'react';
-import { HourSelector } from '../Organisms/HourSelector';
-import { TimePeriod } from '../../types/server/time_period';
-import { API_URL } from '../../types/constants';
-import { CardScan } from '../../types/server/card_scan';
-import { SortableTable } from '~/ui/Organisms/SortableTable';
-import { UserSubscriptionTag } from '~/ui/Atoms/UserSubscriptionTag';
+import React, { useCallback, useEffect, useState } from 'react';
+import { API_URL } from '~/types/constants';
+import { CardScan, TimePeriod } from '~/types/server';
+import { UserSubscriptionTag } from '~/ui/Atoms';
+import { HourSelector, SortableTable } from '~/ui/Organisms';
 
 export const ScanPage = (): React.ReactElement => {
     const [hours, setHours] = useState<TimePeriod[]>([]);
@@ -67,6 +65,11 @@ export const ScanPage = (): React.ReactElement => {
         })();
     }, [selectedHour]);
 
+    /**
+     * Function triggered when the user change the selected hour in the selector
+     */
+    const onHourSelectorChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setSelectedHour(+e.target.value), []);
+
     return (
         <main>
             <h1>Entrées du foyer</h1>
@@ -74,8 +77,10 @@ export const ScanPage = (): React.ReactElement => {
             <HourSelector
                 name="hours"
                 data={hours}
-                onChange={e => setSelectedHour(+e.target.value)}
+                onChange={onHourSelectorChange}
             />
+
+            <div style={{width: '100%', margin: '1rem 0'}} aria-hidden />
 
             <SortableTable
                 data={history}
@@ -87,7 +92,7 @@ export const ScanPage = (): React.ReactElement => {
                         sortable: true,
                         sortFunction: (a, b) =>
                             +((a as string).match(/\d+/) || 0) <
-                            +((b as string).match(/\d+/) || 0)
+                                +((b as string).match(/\d+/) || 0)
                                 ? -1
                                 : 1,
                         width: '150px'

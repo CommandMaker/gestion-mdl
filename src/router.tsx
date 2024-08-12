@@ -15,9 +15,7 @@
  */
 
 import { createBrowserRouter } from 'react-router-dom';
-import { BasePage } from './ui/Pages/BasePage';
-import { ScanPage } from './ui/Pages/ScanPage';
-import { HistoryPage } from './ui/Pages/HistoryPage';
+import { BasePage, HistoryPage, ScanPage } from '~/ui/Pages';
 
 export const router = createBrowserRouter([
     {

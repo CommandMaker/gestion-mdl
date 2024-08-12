@@ -87,16 +87,30 @@ export const SortableTable = ({
                 onSortChange={onSortChange}
             />
 
-            { data.length > 0 ?
+            {data.length > 0 ? (
                 <SortableTableBody
                     rows={rows}
                     stripped={stripped}
                     gridTemplate={gridTemplate}
                     columns={columns}
                 />
-                : <p style={{columnSpan: 'all', textAlign: 'center', padding: '1rem 0'}}>Aucune données</p>
-            }
-
-        </table>
+            ) : (
+                <tbody>
+                    <tr>
+                        <td>
+                            <p
+                                style={{
+                                    columnSpan: 'all',
+                                    textAlign: 'center',
+                                    padding: '1rem 0'
+                                }}
+                            >
+                                Aucune données
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            )}
+            </table>
     );
 };

@@ -16,7 +16,7 @@
 
 import React from 'react';
 import Styles from './Dashboard.module.scss';
-import { Button } from '../Atoms/Button';
+import { Button } from '~/ui/Atoms/Button';
 import {
     ChartLineUpIcon,
     ClockIcon,
@@ -24,8 +24,8 @@ import {
     ScannerTouchScreenIcon,
     SignatureIcon,
     UsersIcon
-} from '../Atoms/Icons/Icons';
-import { Divider } from '../Atoms/Divider';
+} from '~/ui/Atoms/Icons/Icons';
+import { Divider } from '~/ui/Atoms/Divider';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export const Dashboard = (): React.ReactElement => {

@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { User } from '~/types/server/user';
+import { User } from '~/types/server';
 import Styles from './UserSubscriptionTag.module.scss';
 import React, { memo } from 'react';
 

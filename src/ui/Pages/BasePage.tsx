@@ -17,7 +17,7 @@
 import React from 'react';
 
 import Styles from './BasePage.module.scss';
-import { Dashboard } from '../Organisms/Dashboard';
+import { Dashboard } from '~/ui/Organisms/Dashboard';
 import { Outlet } from 'react-router-dom';
 
 export const BasePage = (): React.ReactElement => {

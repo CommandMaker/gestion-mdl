@@ -15,8 +15,8 @@
  */
 
 import React from 'react';
-import { ArrowUpIcon } from '../Icons/Icons';
 import Styles from './TableColumnHeadSortIcon.module.scss';
+import { ArrowUpIcon } from '~/ui/Atoms';
 
 type TableColumnHeadSortIconProps = {
     sortOrder: 'none' | 'asc' | 'desc';
@@ -24,19 +24,15 @@ type TableColumnHeadSortIconProps = {
 
 export const TableColumnHeadSortIcon = ({
     sortOrder
-}: TableColumnHeadSortIconProps): React.ReactElement => {
-    return (
-        <span>
-            <ArrowUpIcon
-                size={15}
-                className={`${Styles.ArrowReversed} ${sortOrder === 'asc' ? Styles.Selected : ''}`}
-                color="var(--gray-400)"
-            />
-            <ArrowUpIcon
-                size={15}
-                className={`${sortOrder === 'desc' ? Styles.Selected : ''}`}
-                color="var(--gray-400)"
-            />
-        </span>
-    );
-};
+}: TableColumnHeadSortIconProps): React.ReactElement => (
+    <span>
+        <ArrowUpIcon
+            size={15}
+            className={`${Styles.ArrowReversed} ${sortOrder === 'asc' ? Styles.Selected : ''}`}
+            color="var(--gray-400)" />
+        <ArrowUpIcon
+            size={15}
+            className={`${sortOrder === 'desc' ? Styles.Selected : ''}`}
+            color="var(--gray-400)" />
+    </span>
+);

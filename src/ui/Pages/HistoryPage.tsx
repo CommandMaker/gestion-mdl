@@ -14,12 +14,145 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { DatePicker, Input, type DatePickerProps } from 'antd';
+import { HourSelector, SortableTable } from '~/ui/Organisms';
+import { CardScan, TimePeriod } from '~/types/server/entities';
+import { getHistory, getTimePeriods } from '~/api';
+import { UserSubscriptionTag } from '~/ui/Atoms';
+
+type HistoryRequest = {
+    date: string;
+    timePeriodId: number;
+};
 
 export const HistoryPage = (): React.ReactElement => {
+    const [requestData, setRequestData] = useState<HistoryRequest>({
+        date: 'nope',
+        timePeriodId: 0
+    });
+    const [timePeriods, setTimePeriods] = useState<TimePeriod[]>([]);
+    const [history, setHistory] = useState<CardScan[]>([]);
+    const [filteredHistory, setFilteredHistory] = useState<CardScan[]>([]);
+
+    /**
+     * Fetch the time periods when page is loaded
+     */
+    useEffect(() => {
+        getTimePeriods().then(d => {
+            setTimePeriods(d);
+
+            d.length > 0
+                ? setRequestData(s => ({ ...s, timePeriodId: d[0].id }))
+                : undefined;
+        });
+    }, []);
+
+    useEffect(() => {
+        setFilteredHistory(history);
+    }, [history]);
+
+    /**
+     * Fetch the history if all data are filled
+     */
+    useEffect(() => {
+        if (requestData.date === 'nope' && requestData.timePeriodId === 0)
+            return;
+
+        getHistory(requestData).then(d => setHistory(d));
+    }, [requestData]);
+
+    const onChange: DatePickerProps['onChange'] = (_, dateString) => {
+        setRequestData(s => ({ ...s, date: dateString as string }));
+    };
+
     return (
         <main>
-            <h1></h1>
+            <h1>Historique du foyer</h1>
+
+            <p style={{ marginBottom: '1rem' }}>Sélectionnez une date :</p>
+            <DatePicker onChange={onChange} style={{ width: '100%' }} />
+
+            <p style={{ margin: '1rem 0' }}>Puis une plage horaire :</p>
+            <HourSelector
+                name="hours"
+                data={timePeriods}
+                onChange={e =>
+                    setRequestData(s => ({
+                        ...s,
+                        timePeriodId: +e.target.value
+                    }))
+                }
+            />
+
+            <div style={{ height: 0, margin: '2rem 0' }} />
+
+            <Input
+                type="text"
+                size="large"
+                placeholder="Rechercher dans l'historique"
+                onChange={e => {
+                    if (e.target.value === '') {
+                        setFilteredHistory(history);
+                        return;
+                    }
+
+                    const search = e.target.value.toLocaleLowerCase();
+                    console.log(search);
+                    setFilteredHistory(
+                        history.filter(
+                            s =>
+                                s.code.toLocaleLowerCase().includes(search) ||
+                                s.user.firstname
+                                    .toLocaleLowerCase()
+                                    .includes(search) ||
+                                s.user.lastname
+                                    .toLocaleLowerCase()
+                                    .includes(search)
+                        )
+                    );
+                }}
+            />
+
+            <SortableTable
+                stripped
+                data={filteredHistory}
+                columns={[
+                    {
+                        label: 'Code',
+                        key: 'code',
+                        sortable: true,
+                        sortFunction: (a, b) =>
+                            +((a as string).match(/\d+/) || 0) <
+                            +((b as string).match(/\d+/) || 0)
+                                ? -1
+                                : 1,
+                        width: '150px'
+                    },
+                    {
+                        label: 'Nom',
+                        key: 'user.lastname',
+                        sortable: true
+                    },
+                    {
+                        label: 'Prénom',
+                        key: 'user.firstname',
+                        sortable: true
+                    },
+                    {
+                        label: 'Classe',
+                        key: 'user.grade'
+                    },
+                    {
+                        label: 'Abonnement',
+                        key: 'user.subscriptionType.displayName',
+                        width: '150px',
+                        renderElement: (row: CardScan) => (
+                            <UserSubscriptionTag user={row.user} />
+                        )
+                    }
+                ]}
+            />
         </main>
     );
 };

@@ -36,37 +36,37 @@ type HourSelectorProps = {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export const HourSelector = memo(({
-    name,
-    data,
-    onChange
-}: HourSelectorProps): React.ReactElement => {
-    const [selectedHour, setHour] = useState<number>();
+export const HourSelector = memo(
+    ({ name, data, onChange }: HourSelectorProps): React.ReactElement => {
+        const [selectedHour, setHour] = useState<number>();
 
-    const populate = (): React.ReactElement[] =>
-        data.map((d, i) => (
-            <TextRadio
-                id={d.displayName}
-                name={name}
-                onChange={onSelected}
-                label={d.displayName}
-                value={d.id.toString()}
-                key={d.id}
-                checked={
-                    selectedHour === undefined ? i === 0 : selectedHour === d.id
-                }
-            />
-        ));
+        const populate = (): React.ReactElement[] =>
+            data.map((d, i) => (
+                <TextRadio
+                    id={d.displayName}
+                    name={name}
+                    onChange={onSelected}
+                    label={d.displayName}
+                    value={d.id.toString()}
+                    key={d.id}
+                    checked={
+                        selectedHour === undefined
+                            ? i === 0
+                            : selectedHour === d.id
+                    }
+                />
+            ));
 
-    const onSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        setHour(+e.target.value);
-        onChange(e);
-    };
+        const onSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
+            setHour(+e.target.value);
+            onChange(e);
+        };
 
-    return (
-        <div className={Styles.HourSelector}>
-            <span style={{ fontWeight: 'bold' }}>Heure :</span>
-            {populate()}
-        </div>
-    );
-});
+        return (
+            <div className={Styles.HourSelector}>
+                <span style={{ fontWeight: 'bold' }}>Heure :</span>
+                {populate()}
+            </div>
+        );
+    }
+);

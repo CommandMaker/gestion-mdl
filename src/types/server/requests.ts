@@ -14,11 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { User } from '~/types/server';
-
-export type CardScan = {
-    code: string;
-    date: string;
+export type GetHistoryRequest = {
+    date?: string;
     timePeriodId: number;
-    user: User;
 };

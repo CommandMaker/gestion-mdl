@@ -111,6 +111,6 @@ export const SortableTable = ({
                     </tr>
                 </tbody>
             )}
-            </table>
+        </table>
     );
 };

@@ -5,4 +5,13 @@ export { Divider } from './Divider';
 export { Button } from './Button';
 export { TextRadio } from './TextRadio';
 export { TableColumnHeadSortIcon } from './Table/TableColumnHeadSortIcon';
-export { ScannerTouchScreenIcon, ClockIcon, UsersIcon, GavelIcon, ChartLineUpIcon, SignatureIcon, RightFromBracketIcon, ArrowUpIcon } from './Icons/Icons';
+export {
+    ScannerTouchScreenIcon,
+    ClockIcon,
+    UsersIcon,
+    GavelIcon,
+    ChartLineUpIcon,
+    SignatureIcon,
+    RightFromBracketIcon,
+    ArrowUpIcon
+} from './Icons/Icons';

@@ -14,27 +14,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
-import Styles from './TableColumnHeadSortIcon.module.scss';
-import { ArrowUpIcon } from '~/ui/Atoms';
-
-type TableColumnHeadSortIconProps = {
-    sortOrder: 'none' | 'asc' | 'desc';
+export type TimePeriod = {
+    id: number;
+    displayName: string;
+    startTime: string;
+    endTime: string;
 };
 
-export const TableColumnHeadSortIcon = ({
-    sortOrder
-}: TableColumnHeadSortIconProps): React.ReactElement => (
-    <span>
-        <ArrowUpIcon
-            size={15}
-            className={`${Styles.ArrowReversed} ${sortOrder === 'asc' ? Styles.Selected : ''}`}
-            color="var(--gray-400)"
-        />
-        <ArrowUpIcon
-            size={15}
-            className={`${sortOrder === 'desc' ? Styles.Selected : ''}`}
-            color="var(--gray-400)"
-        />
-    </span>
-);
+export type CardScan = {
+    code: string;
+    date: string;
+    timePeriodId: number;
+    user: User;
+};
+
+export type User = {
+    id: number;
+    firstname: string;
+    lastname: string;
+    grade: string;
+    code: string;
+    gender: string;
+    subscriptionType: { id: number; displayName: string };
+    subscriptionEnd: string;
+    subscriptionValidity: boolean;
+};

@@ -99,6 +99,14 @@ export const Dashboard = (): React.ReactElement => {
                         selected={location === 'hours'}
                     />
                 </ul>
+
+                <Button
+                    label="Paramètres"
+                    onClick={() => {}}
+                    icon={<GavelIcon />}
+                    selected={location === '/settings'}
+                    style={{ width: '280px', position: 'absolute', bottom: 30 }}
+                />
             </div>
         </aside>
     );

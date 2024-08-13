@@ -14,14 +14,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export type User = {
-    id: number;
-    firstname: string;
-    lastname: string;
-    grade: string;
-    code: string;
-    gender: string;
-    subscriptionType: { id: number; displayName: string };
-    subscriptionEnd: string;
-    subscriptionValidity: boolean;
+/**
+ * Represent the basic response of the server
+ *
+ * The generic T represents the type of the data object.
+ * It's used to provide a better completion and type checking
+ */
+export type BaseResponse<T> = {
+    /**
+     * The status of the response
+     */
+    status: 'ok' | 'error';
+    /**
+     * Data returned by the server, if any
+     */
+    data?: T;
+    /**
+     * In case of error, the message to help understand
+     */
+    message?: string | string[];
 };

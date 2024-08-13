@@ -50,6 +50,8 @@ type ButtonProps = {
     href?: string;
 
     selected?: boolean;
+
+    style?: React.CSSProperties;
 };
 
 export const Button = ({
@@ -57,13 +59,15 @@ export const Button = ({
     title,
     label,
     selected,
-    icon
+    icon,
+    style
 }: ButtonProps): React.ReactElement => {
     return (
         <button
             className={`${Styles.Button} ${selected ? Styles.Selected : ''}`}
             title={title}
             onClick={onClick}
+            style={style}
         >
             <p>
                 {icon} {label}

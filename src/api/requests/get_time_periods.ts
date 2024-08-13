@@ -14,9 +14,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export type TimePeriod = {
-    id: number;
-    displayName: string;
-    startTime: string;
-    endTime: string;
+import { API_URL } from '~/types/constants';
+import { TimePeriod } from '~/types/server/entities';
+import { BaseResponse } from '~/types/server/response';
+
+export const getTimePeriods = async (): Promise<TimePeriod[]> => {
+    const req = await fetch(`${API_URL}/api/time-periods/all`);
+    const data: BaseResponse<TimePeriod[]> = await req.json();
+
+    if (req.status !== 200)
+        throw new Error(req.statusText + ' : ' + data.message);
+
+    return data.data || [];
 };

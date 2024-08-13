@@ -65,7 +65,7 @@ export const Dashboard = (): React.ReactElement => {
                 <ul className={Styles.ButtonList}>
                     <Button
                         label="Adhérents"
-                        onClick={() => {}}
+                        onClick={() => navigate('/adherents')}
                         icon={<UsersIcon />}
                         selected={location === '/adherents'}
                     />

@@ -14,26 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { createBrowserRouter } from 'react-router-dom';
-import { BasePage, HistoryPage, ScanPage, UsersPage } from '~/ui/Pages';
-
-export const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <BasePage />,
-        children: [
-            {
-                path: '/',
-                element: <ScanPage />
-            },
-            {
-                path: '/history',
-                element: <HistoryPage />
-            },
-            {
-                path: '/adherents',
-                element: <UsersPage />
-            }
-        ]
-    }
-]);
+export const UsersPage = (): React.ReactElement => {
+    return <main>
+        <h1>Gestion des adhérents</h1>
+    </main>
+}

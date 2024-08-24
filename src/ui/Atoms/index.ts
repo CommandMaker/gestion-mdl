@@ -5,6 +5,7 @@ export { Divider } from './Divider';
 export { Button } from './Button';
 export { FilledButton } from './FilledButton';
 export { TextRadio } from './TextRadio';
+export { UserManagementActions } from './UserManagementActions';
 export { TableColumnHeadSortIcon } from './Table/TableColumnHeadSortIcon';
 export {
     ScannerTouchScreenIcon,
@@ -17,5 +18,7 @@ export {
     ArrowUpIcon,
     TrashIcon,
     XMarkIcon,
-    CheckIcon
+    CheckIcon,
+    PenIcon,
+    IdCardIcon
 } from './Icons/Icons';

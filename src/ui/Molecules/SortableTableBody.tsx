@@ -46,7 +46,14 @@ export const SortableTableBody = ({
                     className={`${Styles.SortableTableBodyRow} ${stripped && i % 2 === 0 ? Styles.stripped : ''}`}
                 >
                     {columns.map(c => (
-                        <td key={uuid()}>
+                        <td
+                            key={uuid()}
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'start',
+                                alignItems: 'center'
+                            }}
+                        >
                             {c.renderElement !== undefined
                                 ? c.renderElement(r)
                                 : (getNestedProp(r, c.key) as

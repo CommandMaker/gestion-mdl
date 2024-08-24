@@ -16,16 +16,16 @@
 
 import React from 'react';
 import Styles from './Dashboard.module.scss';
-import { Button } from '~/ui/Atoms/Button';
 import {
+    Button,
+    Divider,
     ChartLineUpIcon,
     ClockIcon,
     GavelIcon,
     ScannerTouchScreenIcon,
     SignatureIcon,
     UsersIcon
-} from '~/ui/Atoms/Icons/Icons';
-import { Divider } from '~/ui/Atoms/Divider';
+} from '~/ui/Atoms';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export const Dashboard = (): React.ReactElement => {

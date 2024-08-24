@@ -3,6 +3,7 @@
 export { UserSubscriptionTag } from './UserSubscriptionTag';
 export { Divider } from './Divider';
 export { Button } from './Button';
+export { FilledButton } from './FilledButton';
 export { TextRadio } from './TextRadio';
 export { TableColumnHeadSortIcon } from './Table/TableColumnHeadSortIcon';
 export {
@@ -13,5 +14,8 @@ export {
     ChartLineUpIcon,
     SignatureIcon,
     RightFromBracketIcon,
-    ArrowUpIcon
+    ArrowUpIcon,
+    TrashIcon,
+    XMarkIcon,
+    CheckIcon
 } from './Icons/Icons';

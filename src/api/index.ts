@@ -2,4 +2,5 @@
 
 export { getAllUsers } from './requests/get_all_users';
 export { getTimePeriods } from './requests/get_time_periods';
+export { delete_user } from './requests/delete_user';
 export { getHistory } from './requests/get_history';

@@ -28,6 +28,19 @@ class UserRepository
     }
 
     /**
+     * Fetch a single user based on its id
+     *
+     * @param int $id The user id
+     */
+    public function findOne(int $id): User
+    {
+        $q = $this->pdo->prepare('SELECT * FROM users WHERE id = ?');
+        $q->execute([$id]);
+
+        return User::mapFromArray($q->fetchAll());
+    }
+
+    /**
      * @return User[]
      */
     public function all(int $limit = 10): array
@@ -65,5 +78,11 @@ class UserRepository
             $user->serialize('subscriptionEnd'),
             $user->getId(),
         ]);
+    }
+
+    public function delete(int $id): void
+    {
+        $q = $this->pdo->prepare('DELETE FROM users WHERE id = ?');
+        $q->execute([$id]);
     }
 }

@@ -15,9 +15,13 @@
  */
 
 import { useCallback, useEffect, useState } from 'react';
-import { getAllUsers } from '~/api';
+import { delete_user, getAllUsers } from '~/api';
 import { User } from '~/types/server/entities';
-import { FilledButton, UserManagementActions, UserSubscriptionTag } from '~/ui/Atoms';
+import {
+    FilledButton,
+    UserManagementActions,
+    UserSubscriptionTag
+} from '~/ui/Atoms';
 import { Modal, SortableTable } from '~/ui/Organisms';
 
 export const UsersPage = (): React.ReactElement => {
@@ -26,17 +30,36 @@ export const UsersPage = (): React.ReactElement => {
 
     const handleModalShowChange = (): void => {
         setModal(undefined);
-    }
+    };
 
     const onUserDelete = useCallback((user: User) => {
+        const action = () => {
+            delete_user(user).then(d => {
+                if (d.status !== 'ok') throw new Error(d.message as string);
+                setModal(undefined);
+                setUsers(u => u?.filter(u1 => u1.id !== user.id));
+            });
+        };
+
         setModal(
-            <Modal onClose={handleModalShowChange} title="Confirmer" buttons={
-                <>
-                    <FilledButton label="Oui" onClick={_ => setModal(undefined)} buttonType="danger" style={{width: '100%'}} />
-                </>
-            }>
+            <Modal
+                onClose={handleModalShowChange}
+                title="Confirmer"
+                buttons={
+                    <>
+                        <FilledButton
+                            label="Oui"
+                            onClick={_ => action()}
+                            buttonType="danger"
+                            style={{ width: '100%' }}
+                        />
+                    </>
+                }
+            >
                 Voulez-vous vraiment supprimer&nbsp;
-                <strong>{user.firstname} {user.lastname}</strong>
+                <strong>
+                    {user.firstname} {user.lastname}
+                </strong>
                 &nbsp;?
             </Modal>
         );

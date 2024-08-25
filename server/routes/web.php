@@ -41,6 +41,7 @@ return function (App $app): void {
 
     $app->get('/api/users/all', [UserController::class, 'all']);
     $app->post('/api/users/edit/{id}', [UserController::class, 'edit']);
+    $app->get('/api/users/delete/{id}', [UserController::class, 'delete']);
 
     $app->get('/api/sanctions/all/{id}', [SanctionController::class, 'all']);
     $app->post('/api/sanctions/new', [SanctionController::class, 'new']);

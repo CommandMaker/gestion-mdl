@@ -41,7 +41,7 @@ class UserController
         ]);
     }
 
-    public function edit(Response $response, int $id, UserRepository $userRepository): Response
+    public function edit(Response $response, int $id): Response
     {
         $validator = new Validator($_POST);
         $validator->rules([
@@ -58,10 +58,26 @@ class UserController
 
         $_POST['id'] = $id;
         $user = User::mapFromArray($_POST);
-        $userRepository->edit($user);
+        $this->repository->edit($user);
 
         return $this->json($response, [
             'status' => 'ok',
+        ]);
+    }
+
+    public function delete(Response $response, int $id): Response
+    {
+        if (!$this->repository->findOne($id)) {
+            return $this->json($response, [
+                'status' => 'error',
+                'message' => 'No user found'
+            ], 400);
+        }
+
+        $this->repository->delete($id);
+
+        return $this->json($response, [
+            'status' => 'ok'
         ]);
     }
 }

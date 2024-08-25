@@ -14,7 +14,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { PropsWithChildren, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import {
+    PropsWithChildren,
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState
+} from 'react';
 import { createPortal } from 'react-dom';
 import { v4 } from 'uuid';
 import { XMarkIcon } from '~/ui/Atoms';
@@ -64,7 +71,7 @@ export const Modal = ({
             if (!el || el.contains((e?.target as Node) || null)) return null;
 
             onClose();
-        }
+        };
 
         document.addEventListener('mousedown', callback);
         document.addEventListener('touchstart', callback);
@@ -80,7 +87,10 @@ export const Modal = ({
             <ul className={Styles.ModalBackground} ref={bodyRef}>
                 <li className={Styles.TitleLine}>
                     <h3>{title}</h3>
-                    <button onClick={_ => onClose()} className={Styles.ModalCloseButton}>
+                    <button
+                        onClick={_ => onClose()}
+                        className={Styles.ModalCloseButton}
+                    >
                         <XMarkIcon size={25} />
                     </button>
                 </li>
@@ -88,14 +98,17 @@ export const Modal = ({
                 <li>{buttons}</li>
             </ul>
         </PortalModal>
-    )
+    );
 };
 
 type PortalModalProps = PropsWithChildren & {
     containerId: string;
 };
 
-const PortalModal = ({ children, containerId }: PortalModalProps): React.ReactElement => {
+const PortalModal = ({
+    children,
+    containerId
+}: PortalModalProps): React.ReactElement => {
     const [portalElement, setPortalElement] = useState<HTMLElement>();
 
     /**
@@ -120,7 +133,7 @@ const PortalModal = ({ children, containerId }: PortalModalProps): React.ReactEl
                 element.parentNode.removeChild(element);
                 portalCreated = false;
             }
-        }
+        };
     }, [containerId]);
 
     if (portalElement === undefined) return <></>;

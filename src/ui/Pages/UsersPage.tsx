@@ -17,14 +17,29 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getAllUsers } from '~/api';
 import { User } from '~/types/server/entities';
-import { UserManagementActions, UserSubscriptionTag } from '~/ui/Atoms';
-import { SortableTable } from '~/ui/Organisms';
+import { FilledButton, UserManagementActions, UserSubscriptionTag } from '~/ui/Atoms';
+import { Modal, SortableTable } from '~/ui/Organisms';
 
 export const UsersPage = (): React.ReactElement => {
     const [users, setUsers] = useState<User[]>();
+    const [modal, setModal] = useState<React.ReactElement>();
+
+    const handleModalShowChange = (): void => {
+        setModal(undefined);
+    }
 
     const onUserDelete = useCallback((user: User) => {
-        console.log('Deleted');
+        setModal(
+            <Modal onClose={handleModalShowChange} title="Confirmer" buttons={
+                <>
+                    <FilledButton label="Oui" onClick={_ => setModal(undefined)} buttonType="danger" style={{width: '100%'}} />
+                </>
+            }>
+                Voulez-vous vraiment supprimer&nbsp;
+                <strong>{user.firstname} {user.lastname}</strong>
+                &nbsp;?
+            </Modal>
+        );
     }, []);
 
     const onUserEdit = useCallback((user: User) => {
@@ -45,6 +60,8 @@ export const UsersPage = (): React.ReactElement => {
     return (
         <main>
             <h1>Gestion des adhérents</h1>
+
+            {modal}
 
             {users !== undefined ? (
                 <SortableTable

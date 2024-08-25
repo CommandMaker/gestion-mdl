@@ -41,7 +41,7 @@ type FilledButtonProps = {
 
     style?: React.CSSProperties;
 
-    type?: 'normal' | 'success' | 'danger';
+    buttonType?: 'normal' | 'success' | 'danger';
 };
 
 export const FilledButton = memo(
@@ -51,10 +51,10 @@ export const FilledButton = memo(
         icon,
         style,
         onClick,
-        type = 'normal'
+        buttonType = 'normal'
     }: FilledButtonProps): React.ReactElement => {
         return (
-            <button title={title} style={style} className={Styles.Button}>
+            <button title={title} style={{background: buttonType === 'normal' ? 'var(--blue-gray-400)' : 'var(--red-400)', ...style}} className={Styles.Button} onClick={onClick}>
                 {icon} {label}
             </button>
         );

@@ -63,6 +63,8 @@ class User extends AbstractEntity
     protected function cast(): array
     {
         return [
+            // TODO : I need to change the format of the date to set it to a french format
+            // because I have absolutely no idea why i set it to american format
             'subscriptionEnd' => 'datetime:Y-m-d',
         ];
     }

@@ -23,11 +23,11 @@ class SubscriptionType
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['st:read'])]
-    private ?string $display_name = null;
+    #[Groups(['st:read', 'user:read'])]
+    private ?string $displayName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['st:read'])]
+    #[Groups(['st:read', 'user:read'])]
     private ?string $duration = null;
 
     public function getId(): ?int
@@ -37,12 +37,12 @@ class SubscriptionType
 
     public function getDisplayName(): ?string
     {
-        return $this->display_name;
+        return $this->displayName;
     }
 
-    public function setDisplayName(string $display_name): static
+    public function setDisplayName(string $displayName): static
     {
-        $this->display_name = $display_name;
+        $this->displayName = $displayName;
 
         return $this;
     }

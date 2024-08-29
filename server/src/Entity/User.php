@@ -46,11 +46,11 @@ class User
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['user:read'])]
-    private ?SubscriptionType $subscription_type = null;
+    private ?SubscriptionType $subscriptionType = null;
 
     #[ORM\Column(options: ['default' => false])]
     #[Groups(['user:read'])]
-    private ?bool $is_admin = false;
+    private ?bool $isAdmin = false;
 
     public function getId(): ?int
     {
@@ -119,24 +119,24 @@ class User
 
     public function getSubscriptionType(): ?SubscriptionType
     {
-        return $this->subscription_type;
+        return $this->subscriptionType;
     }
 
-    public function setSubscriptionType(?SubscriptionType $subscription_type): static
+    public function setSubscriptionType(?SubscriptionType $subscriptionType): static
     {
-        $this->subscription_type = $subscription_type;
+        $this->subscriptionType = $subscriptionType;
 
         return $this;
     }
 
     public function getIsAdmin(): ?bool
     {
-        return $this->is_admin;
+        return $this->isAdmin;
     }
 
-    public function setIsAdmin(bool $is_admin): static
+    public function setAdmin(bool $isAdmin): static
     {
-        $this->is_admin = $is_admin;
+        $this->isAdmin = $isAdmin;
 
         return $this;
     }

@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -12,7 +14,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     normalizationContext: [
         'groups' => [
-            'user:read'
+            'user:read',
+            'st:read'
+        ]
+    ],
+    denormalizationContext: [
+        'groups' => [
+            'user:write'
         ]
     ]
 )]
@@ -24,33 +32,44 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'card_scan:read', 'user:write'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'card_scan:read', 'user:write'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'card_scan:read', 'user:write'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'card_scan:read', 'user:write'])]
     private ?string $gender = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'card_scan:read', 'user:write'])]
     private ?string $grade = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'card_scan:read', 'user:write'])]
     private ?SubscriptionType $subscriptionType = null;
 
     #[ORM\Column(options: ['default' => false])]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'user:write'])]
     private ?bool $isAdmin = false;
+
+    /**
+     * @var Collection<int, CardScan>
+     */
+    #[ORM\OneToMany(targetEntity: CardScan::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $cardScans;
+
+    public function __construct()
+    {
+        $this->cardScans = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -134,9 +153,39 @@ class User
         return $this->isAdmin;
     }
 
-    public function setAdmin(bool $isAdmin): static
+    public function setIsAdmin(bool $isAdmin): static
     {
         $this->isAdmin = $isAdmin;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CardScan>
+     */
+    public function getCardScans(): Collection
+    {
+        return $this->cardScans;
+    }
+
+    public function addCardScan(CardScan $cardScan): static
+    {
+        if (!$this->cardScans->contains($cardScan)) {
+            $this->cardScans->add($cardScan);
+            $cardScan->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCardScan(CardScan $cardScan): static
+    {
+        if ($this->cardScans->removeElement($cardScan)) {
+            // set the owning side to null (unless already changed)
+            if ($cardScan->getUser() === $this) {
+                $cardScan->setUser(null);
+            }
+        }
 
         return $this;
     }

@@ -16,3 +16,5 @@ api_platform:
             rfc_7807_compliant_errors: true
     keep_legacy_inflector: false
     use_symfony_listeners: true
+    exception_to_status:
+        App\Exception\UserNotFoundException: 400

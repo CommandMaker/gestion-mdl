@@ -23,11 +23,11 @@ class SubscriptionType
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['st:read', 'user:read'])]
+    #[Groups(['st:read'])]
     private ?string $displayName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['st:read', 'user:read'])]
+    #[Groups(['st:read'])]
     private ?string $duration = null;
 
     public function getId(): ?int

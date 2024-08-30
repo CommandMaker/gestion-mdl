@@ -3,6 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\SubscriptionTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -13,6 +17,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
         'groups' => [
             'st:read',
         ],
+    ],
+    operations: [
+        new GetCollection,
+        new Post,
+        new Patch,
+        new Delete,
     ]
 )]
 class SubscriptionType

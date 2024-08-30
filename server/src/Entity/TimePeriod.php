@@ -3,12 +3,23 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\TimePeriodRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TimePeriodRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection,
+        new Post,
+        new Patch,
+        new Delete,
+    ]
+)]
 class TimePeriod
 {
     #[ORM\Id]

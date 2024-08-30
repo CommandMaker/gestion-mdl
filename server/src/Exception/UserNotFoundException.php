@@ -2,6 +2,4 @@
 
 namespace App\Exception;
 
-class UserNotFoundException extends \Exception
-{
-}
+class UserNotFoundException extends \Exception {}

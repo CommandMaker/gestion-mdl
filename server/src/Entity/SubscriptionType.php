@@ -11,8 +11,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     normalizationContext: [
         'groups' => [
-            'st:read'
-        ]
+            'st:read',
+        ],
     ]
 )]
 class SubscriptionType

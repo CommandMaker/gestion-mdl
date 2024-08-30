@@ -15,13 +15,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
     normalizationContext: [
         'groups' => [
             'user:read',
-            'st:read'
-        ]
+            'st:read',
+        ],
     ],
     denormalizationContext: [
         'groups' => [
-            'user:write'
-        ]
+            'user:write',
+        ],
     ]
 )]
 class User
@@ -68,7 +68,7 @@ class User
 
     public function __construct()
     {
-        $this->cardScans = new ArrayCollection();
+        $this->cardScans = new ArrayCollection;
     }
 
     public function getId(): ?int

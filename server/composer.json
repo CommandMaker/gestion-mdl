@@ -75,12 +75,14 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": true,
             "require": "7.1.*",
             "docker": true
         }
     },
     "require-dev": {
+        "larastan/larastan": "^2.9",
+        "laravel/pint": "^1.17",
         "symfony/maker-bundle": "^1.60"
     }
 }

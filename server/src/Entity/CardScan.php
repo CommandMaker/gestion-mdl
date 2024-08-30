@@ -14,18 +14,18 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: CardScanRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(),
-        new Get(),
+        new GetCollection,
+        new Get,
         new Post(
             name: 'create',
             controller: CreateCardScanController::class
-        )
+        ),
     ],
     normalizationContext: [
-        'groups' => ['card_scan:read', 'st:read']
+        'groups' => ['card_scan:read', 'st:read'],
     ],
     denormalizationContext: [
-        'groups' => ['card_scan:write']
+        'groups' => ['card_scan:write'],
     ]
 )]
 class CardScan

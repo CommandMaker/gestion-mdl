@@ -76,9 +76,16 @@ class User
     #[ORM\OneToMany(targetEntity: CardScan::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $cardScans;
 
+    /**
+     * @var Collection<int, Sanction>
+     */
+    #[ORM\OneToMany(targetEntity: Sanction::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $sanctions;
+
     public function __construct()
     {
         $this->cardScans = new ArrayCollection;
+        $this->sanctions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -194,6 +201,36 @@ class User
             // set the owning side to null (unless already changed)
             if ($cardScan->getUser() === $this) {
                 $cardScan->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sanction>
+     */
+    public function getSanctions(): Collection
+    {
+        return $this->sanctions;
+    }
+
+    public function addSanction(Sanction $sanction): static
+    {
+        if (!$this->sanctions->contains($sanction)) {
+            $this->sanctions->add($sanction);
+            $sanction->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSanction(Sanction $sanction): static
+    {
+        if ($this->sanctions->removeElement($sanction)) {
+            // set the owning side to null (unless already changed)
+            if ($sanction->getUser() === $this) {
+                $sanction->setUser(null);
             }
         }
 

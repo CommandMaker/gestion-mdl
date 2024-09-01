@@ -19,9 +19,9 @@ use Doctrine\ORM\Mapping as ORM;
             controller: QuerySanctionsController::class,
             name: 'get_collection'
         ),
-        new Patch(),
-        new Delete(),
-        new Post()
+        new Patch,
+        new Delete,
+        new Post,
     ],
 )]
 class Sanction

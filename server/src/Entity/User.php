@@ -4,17 +4,16 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Controller\DumpCardController;
 use App\Repository\UserRepository;
-use DantSu\PHPImageEditor\Image;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Serializer\Attribute\Groups;
-use chillerlan\QRCode\QRCode;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -35,6 +34,12 @@ use chillerlan\QRCode\QRCode;
         new Post,
         new Patch,
         new Delete,
+        new Get(
+            controller: DumpCardController::class,
+            name: 'card_dump',
+            uriTemplate: '/users/{id}/card',
+            description: 'Create the user\'s card'
+        ),
     ]
 )]
 class User
@@ -88,7 +93,7 @@ class User
     public function __construct()
     {
         $this->cardScans = new ArrayCollection;
-        $this->sanctions = new ArrayCollection();
+        $this->sanctions = new ArrayCollection;
     }
 
     public function getId(): ?int

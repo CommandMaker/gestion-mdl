@@ -3,33 +3,27 @@
 namespace App\Core\Card;
 
 use App\Entity\User;
-use Symfony\Component\Filesystem\Path;
 use chillerlan\QRCode\Output\QROutputInterface;
 use chillerlan\QRCode\QRCode;
-use \DantSu\PHPImageEditor\Image;
 use chillerlan\QRCode\QROptions;
+use DantSu\PHPImageEditor\Image;
+use Symfony\Component\Filesystem\Path;
 
 class CardGenerator
 {
-
     public function __construct(
         private string $projectDir
-    )
-    {
-    }
+    ) {}
 
     /**
      * Generate the user card as a base64 image
-     *
-     * @param User $user
-     * @return string
      */
     public function generateCard(User $user): string
     {
         $image = Image::fromData(file_get_contents(Path::makeAbsolute('var/storage/card_template.jpg', $this->projectDir)) ?: '');
 
         $options = new QROptions([
-            'outputType' => QROutputInterface::GDIMAGE_PNG
+            'outputType' => QROutputInterface::GDIMAGE_PNG,
         ]);
 
         /** @var string */

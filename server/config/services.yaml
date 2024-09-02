@@ -23,5 +23,9 @@ services:
     App\Core\Card\CardGenerator:
         arguments:
             - '%kernel.project_dir%'
+
+    App\EventListener\RequestListener:
+        arguments:
+            - '%env(MASTER_PASSWORD)%'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

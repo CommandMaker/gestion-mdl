@@ -18,3 +18,4 @@ api_platform:
     use_symfony_listeners: true
     exception_to_status:
         App\Exception\UserNotFoundException: 400
+        App\Exception\PasswordMissingException: 403

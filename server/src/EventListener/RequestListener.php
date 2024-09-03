@@ -20,7 +20,12 @@ final class RequestListener
     {
         $request = $event->getRequest();
 
-        if ($request->getMethod() !== 'GET' && $request->getRequestUri() !== '/api/card_scans') {
+        $ignoredRoutes = [
+            '/api/card_scans',
+            '/api/card_scans/history',
+        ];
+
+        if ($request->getMethod() !== 'GET' && !in_array($request->getRequestUri(), $ignoredRoutes)) {
             $password = $request->getPayload()->getString('master_password');
 
             if ($password === '' && $request->query->getString('master_password') === '') {

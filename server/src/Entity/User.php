@@ -32,6 +32,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new GetCollection,
         new Post,
+        new Get,
         new Patch,
         new Delete,
         new Get(

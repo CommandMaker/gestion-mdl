@@ -86,6 +86,8 @@
     "require-dev": {
         "larastan/larastan": "^2.9",
         "laravel/pint": "^1.17",
-        "symfony/maker-bundle": "^1.60"
+        "symfony/maker-bundle": "^1.60",
+        "symfony/stopwatch": "7.1.*",
+        "symfony/web-profiler-bundle": "7.1.*"
     }
 }

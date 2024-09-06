@@ -10,12 +10,17 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Controller\DumpCardController;
 use App\Repository\UserRepository;
+use App\State\PasswordHasherProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(['code'])]
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
     normalizationContext: [
@@ -31,7 +36,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
     ],
     operations: [
         new GetCollection,
-        new Post,
+        new Post(
+            processor: PasswordHasherProcessor::class
+        ),
         new Get,
         new Patch,
         new Delete,
@@ -43,7 +50,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
     ]
 )]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -70,6 +77,16 @@ class User
     #[Groups(['user:read', 'card_scan:read', 'user:write'])]
     private ?string $grade = null;
 
+    /**
+     * @var list<string>
+     */
+    #[ORM\Column]
+    private array $roles = ['ROLE_USER'];
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user:write'])]
+    private ?string $password = null;
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['user:read', 'card_scan:read', 'user:write'])]
@@ -95,6 +112,8 @@ class User
     {
         $this->cardScans = new ArrayCollection;
         $this->sanctions = new ArrayCollection;
+
+        $this->roles = ['ROLE_USER'];
     }
 
     public function getId(): ?int
@@ -244,5 +263,31 @@ class User
         }
 
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    public function eraseCredentials(): void
+    {
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(?string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->code ?? '';
     }
 }

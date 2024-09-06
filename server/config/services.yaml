@@ -24,8 +24,8 @@ services:
         arguments:
             - '%kernel.project_dir%'
 
-    App\EventListener\RequestListener:
-        arguments:
-            - '%env(MASTER_PASSWORD)%'
+    App\State\PasswordHasherProcessor:
+        bind:
+            $processor: '@api_platform.doctrine.orm.state.persist_processor'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

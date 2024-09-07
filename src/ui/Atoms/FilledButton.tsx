@@ -22,7 +22,7 @@ type FilledButtonProps = {
     /**
      * Callback triggered when the button is clicked
      */
-    onClick: (event: MouseEvent<HTMLButtonElement>) => void;
+    onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 
     /**
      * The title of the button (represent the title attribute of an HTML button)
@@ -42,6 +42,8 @@ type FilledButtonProps = {
     style?: React.CSSProperties;
 
     buttonType?: 'normal' | 'success' | 'danger';
+
+    htmlType?: 'button' | 'reset' | 'submit';
 };
 
 export const FilledButton = memo(
@@ -51,7 +53,8 @@ export const FilledButton = memo(
         icon,
         style,
         onClick,
-        buttonType = 'normal'
+        buttonType = 'normal',
+        htmlType = 'button'
     }: FilledButtonProps): React.ReactElement => {
         return (
             <button
@@ -65,6 +68,7 @@ export const FilledButton = memo(
                 }}
                 className={Styles.Button}
                 onClick={onClick}
+                type={htmlType}
             >
                 {icon} {label}
             </button>

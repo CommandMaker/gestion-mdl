@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import Styles from './Dashboard.module.scss';
 import {
     Button,
@@ -24,13 +24,21 @@ import {
     GavelIcon,
     ScannerTouchScreenIcon,
     SignatureIcon,
-    UsersIcon
+    UsersIcon,
+    RightFromBracketIcon
 } from '~/ui/Atoms';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { User } from '~/types/server/entities';
+import { get_logout } from '~/api';
+import { MDLIcon } from '../Atoms/Icons/Icons';
 
-export const Dashboard = (): React.ReactElement => {
+export const Dashboard = ({ user }: { user: User }): React.ReactElement => {
     const { pathname: location } = useLocation();
     const navigate = useNavigate();
+
+    const handleLogout = useCallback(() => {
+        get_logout().then(_ => navigate('/login'));
+    }, []);
 
     return (
         <aside className={Styles.Container}>
@@ -43,7 +51,22 @@ export const Dashboard = (): React.ReactElement => {
                     marginTop: '10px'
                 }}
             >
-                <h2 className={Styles.Title}>MDL Beaussier</h2>
+                <div
+                    style={{
+                        marginBottom: '1.5rem',
+                        display: 'flex',
+                        gap: '1rem',
+                        flexDirection: 'column'
+                    }}
+                >
+                    <MDLIcon />
+                    <p style={{ fontSize: '0.80rem' }}>
+                        Connecté en tant que{' '}
+                        <strong style={{ fontSize: '0.80rem' }}>
+                            {user.firstname} {user.lastname}
+                        </strong>
+                    </p>
+                </div>
 
                 <ul className={Styles.ButtonList}>
                     <Button
@@ -101,11 +124,16 @@ export const Dashboard = (): React.ReactElement => {
                 </ul>
 
                 <Button
-                    label="Paramètres"
-                    onClick={() => {}}
-                    icon={<GavelIcon />}
+                    label="Se déconnecter"
+                    onClick={handleLogout}
+                    icon={<RightFromBracketIcon color="var(--red-700)" />}
                     selected={location === '/settings'}
-                    style={{ width: '280px', position: 'absolute', bottom: 30 }}
+                    style={{
+                        width: '280px',
+                        position: 'absolute',
+                        bottom: 30,
+                        color: 'var(--red-700)'
+                    }}
                 />
             </div>
         </aside>

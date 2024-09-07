@@ -15,7 +15,11 @@ class APIJsonLoginController extends AbstractController
     }
 
     #[Route('/api/logout', name: 'login.logout')]
-    public function logout(): void
+    public function logout(): void {}
+
+    #[Route('/api/me', name: 'login.user')]
+    public function user(): JsonResponse
     {
+        return $this->json($this->getUser());
     }
 }

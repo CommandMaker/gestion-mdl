@@ -1,2 +1,4 @@
 node_modules/
 vendor/
+server/public/bundles
+server/var

@@ -20,5 +20,6 @@ export {
     XMarkIcon,
     CheckIcon,
     PenIcon,
-    IdCardIcon
+    IdCardIcon,
+    MDLIcon
 } from './Icons/Icons';

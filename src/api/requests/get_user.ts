@@ -14,36 +14,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { createBrowserRouter } from 'react-router-dom';
-import {
-    BasePage,
-    HistoryPage,
-    ScanPage,
-    UsersPage,
-    LoginPage
-} from '~/ui/Pages';
+import { API_URL } from '~/types/constants';
+import { User } from '~/types/server/entities';
 
-export const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <BasePage />,
-        children: [
-            {
-                path: '/',
-                element: <ScanPage />
-            },
-            {
-                path: '/history',
-                element: <HistoryPage />
-            },
-            {
-                path: '/adherents',
-                element: <UsersPage />
-            }
-        ]
-    },
-    {
-        path: '/login',
-        element: <LoginPage />
+export const get_user = async (): Promise<User> => {
+    const d = await fetch(`${API_URL}/api/me`, {
+        headers: {
+            Accept: 'application/json'
+        },
+        credentials: 'include'
+    });
+    if (d.ok) {
+        return d.json();
     }
-]);
+    throw new Error(d.statusText);
+};

@@ -31,8 +31,7 @@ export const ScanPage = (): React.ReactElement => {
      */
     useEffect(() => {
         get_all_time_periods().then(t => {
-            if (t.length === 0)
-                return;
+            if (t.length === 0) return;
 
             setHours(t);
             setSelectedHour(t[0]['@id']);

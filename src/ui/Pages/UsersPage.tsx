@@ -16,6 +16,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { delete_user, get_all_users } from '~/api';
+import { API_URL } from '~/types/constants';
 import { User } from '~/types/server/entities';
 import {
     FilledButton,
@@ -34,10 +35,9 @@ export const UsersPage = (): React.ReactElement => {
 
     const onUserDelete = useCallback((user: User) => {
         const action = () => {
-            delete_user(user).then(d => {
-                if (d.status !== 'ok') throw new Error(d.message as string);
-                setModal(undefined);
-                setUsers(u => u?.filter(u1 => u1.id !== user.id));
+            delete_user(user).then(_ => {
+                handleModalShowChange();
+                setUsers(u => u?.filter(u1 => u1['@id'] !== user['@id']));
             });
         };
 
@@ -70,7 +70,7 @@ export const UsersPage = (): React.ReactElement => {
     }, []);
 
     const onUserCardDump = useCallback((user: User) => {
-        console.log('Card dumped');
+        window.open(`${API_URL}${user['@id']}/card`, '_blank');
     }, []);
 
     /**

@@ -24,7 +24,7 @@ import { GetHistoryRequest } from '~/types/server/requests';
 
 export const HistoryPage = (): React.ReactElement => {
     const [requestData, setRequestData] = useState<GetHistoryRequest>({
-        timePeriodId: '',
+        timePeriodId: ''
     });
     const [timePeriods, setTimePeriods] = useState<TimePeriod[]>([]);
     const [history, setHistory] = useState<CardScan[]>([]);

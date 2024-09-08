@@ -16,7 +16,6 @@
 
 import { API_URL } from '~/types/constants';
 import { User } from '~/types/server/entities';
-import { BaseResponse } from '~/types/server/response';
 
 /**
  * Delete a user from the app
@@ -24,12 +23,13 @@ import { BaseResponse } from '~/types/server/response';
  * @param {User} user The user to delete
  * @return {BaseResponse} The response of the server
  */
-export const delete_user = async (
-    user: User
-): Promise<BaseResponse<undefined>> => {
-    const req = await fetch(`${API_URL}/api/users/delete/${user.id}`);
+export const delete_user = async (user: User): Promise<void> => {
+    const req = await fetch(`${API_URL}${user['@id']}`, {
+        method: 'DELETE',
+        credentials: 'include'
+    });
 
-    const body: BaseResponse<undefined> = await req.json();
-
-    return body;
+    if (!req.ok) {
+        throw new Error(req.statusText);
+    }
 };

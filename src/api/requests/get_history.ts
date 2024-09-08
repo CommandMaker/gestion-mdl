@@ -21,12 +21,15 @@ import { GetHistoryRequest } from '~/types/server/requests';
 export const getHistory = async (
     req: GetHistoryRequest
 ): Promise<CardScan[]> => {
-    const fReq = await fetch(`${API_URL}/api/card_scans/history?date=${req.date?.toISOString()}&timePeriod=${req.timePeriodId}`, {
-        headers: {
-            Accept: 'application/ld+json'
-        },
-        credentials: 'include'
-    });
+    const fReq = await fetch(
+        `${API_URL}/api/card_scans/history?date=${req.date?.toISOString()}&timePeriod=${req.timePeriodId}`,
+        {
+            headers: {
+                Accept: 'application/ld+json'
+            },
+            credentials: 'include'
+        }
+    );
 
     if (!fReq.ok) {
         throw new Error(fReq.statusText);

@@ -25,8 +25,7 @@ export const get_all_time_periods = async (): Promise<TimePeriod[]> => {
         credentials: 'include'
     });
 
-    if (!req.ok)
-        throw new Error(req.statusText);
+    if (!req.ok) throw new Error(req.statusText);
 
     return (await req.json())['hydra:member'];
 };

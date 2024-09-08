@@ -16,14 +16,20 @@
 
 import { API_URL } from '~/types/constants';
 import { User } from '~/types/server/entities';
-import { BaseResponse } from '~/types/server/response';
 
-export const getAllUsers = async (): Promise<User[]> => {
-    const req = await fetch(`${API_URL}/api/users/all`);
-    const body: BaseResponse<User[]> = await req.json();
+export const get_all_users = async (): Promise<User[]> => {
+    const req = await fetch(`${API_URL}/api/users`, {
+        headers: {
+            Accept: 'application/ld+json'
+        },
+        credentials: 'include'
+    });
 
-    if (body.status !== 'ok')
-        throw new Error(req.statusText + ' : ' + body.message);
+    if (!req.ok) {
+        throw new Error(req.statusText);
+    }
 
-    return body.data || [];
+    const body = await req.json();
+
+    return body['hydra:member'];
 };

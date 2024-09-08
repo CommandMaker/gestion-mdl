@@ -17,19 +17,26 @@
 import { Input, Select } from 'antd';
 import Styles from './LoginPage.module.scss';
 import { FilledButton } from '../Atoms';
-import { useCallback, useState } from 'react';
-import { post_login_user } from '~/api';
+import { useCallback, useEffect, useState } from 'react';
+import { post_login_user, get_all_users } from '~/api';
 import { useNavigate } from 'react-router-dom';
 import { MDLIcon } from '../Atoms/Icons/Icons';
+import { User } from '~/types/server/entities';
 
 type UserData = {
     username?: string;
     password?: string;
 };
 
+type LoginUserSelectOption = {
+    label: string;
+    value: string;
+};
+
 export const LoginPage = (): React.ReactElement => {
     const [userData, setUserData] = useState<UserData>({});
     const navigate = useNavigate();
+    const [users, setUsers] = useState<User[] | undefined>();
 
     const loginUser = useCallback(
         (e: React.FormEvent) => {
@@ -43,7 +50,24 @@ export const LoginPage = (): React.ReactElement => {
         [userData]
     );
 
-    return (
+    useEffect(() => {
+        get_all_users().then(users => setUsers(users));
+    }, []);
+
+    const getLoggableUsers = (): LoginUserSelectOption[] => {
+        return users!
+            .map(user =>
+                user.isAdmin
+                    ? ({
+                          label: `${user.firstname} ${user.lastname} (${user.grade})`,
+                          value: user.code
+                      } as LoginUserSelectOption)
+                    : null
+            )
+            .filter(u => u !== null) as LoginUserSelectOption[];
+    };
+
+    return users ? (
         <main className={Styles.Container}>
             <form className={Styles.FormContainer} onSubmit={loginUser}>
                 <MDLIcon />
@@ -52,7 +76,7 @@ export const LoginPage = (): React.ReactElement => {
 
                 <label htmlFor="username">Membre du CA ayant les clefs</label>
                 <Select
-                    options={[{ label: 'Ethan TOULON', value: 'an0181' }]}
+                    options={getLoggableUsers()}
                     placeholder="Choisissez votre nom"
                     onChange={e => setUserData(s => ({ ...s, username: e }))}
                 />
@@ -69,5 +93,7 @@ export const LoginPage = (): React.ReactElement => {
                 <FilledButton label="Se connecter" htmlType="submit" />
             </form>
         </main>
+    ) : (
+        <></>
     );
 };

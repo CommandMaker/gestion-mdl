@@ -48,7 +48,8 @@ export const Dashboard = ({ user }: { user: User }): React.ReactElement => {
                     padding: '48px 25px',
                     width: 'calc(100% - 20px)',
                     height: 'calc(100vh - 40px)',
-                    marginTop: '10px'
+                    marginTop: '10px',
+                    overflowX: 'hidden'
                 }}
             >
                 <div
@@ -123,6 +124,8 @@ export const Dashboard = ({ user }: { user: User }): React.ReactElement => {
                     />
                 </ul>
 
+                <Divider />
+
                 <Button
                     label="Se déconnecter"
                     onClick={handleLogout}
@@ -130,8 +133,6 @@ export const Dashboard = ({ user }: { user: User }): React.ReactElement => {
                     selected={location === '/settings'}
                     style={{
                         width: '280px',
-                        position: 'absolute',
-                        bottom: 30,
                         color: 'var(--red-700)'
                     }}
                 />

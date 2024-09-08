@@ -15,7 +15,7 @@
  */
 
 import { useCallback, useEffect, useState } from 'react';
-import { delete_user, getAllUsers } from '~/api';
+import { delete_user, get_all_users } from '~/api';
 import { User } from '~/types/server/entities';
 import {
     FilledButton,
@@ -77,7 +77,7 @@ export const UsersPage = (): React.ReactElement => {
      * Fetch users from the API when the page is loaded
      */
     useEffect(() => {
-        getAllUsers().then(users => setUsers(users));
+        get_all_users().then(users => setUsers(users));
     }, []);
 
     return (

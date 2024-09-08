@@ -38,4 +38,5 @@ export type User = {
     subscriptionType: { id: number; displayName: string };
     subscriptionEnd: string;
     subscriptionValidity: boolean;
+    isAdmin: boolean;
 };

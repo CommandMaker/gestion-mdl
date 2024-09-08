@@ -15,6 +15,6 @@
  */
 
 export type GetHistoryRequest = {
-    date?: string;
-    timePeriodId: number;
+    date?: Date;
+    timePeriodId: string;
 };

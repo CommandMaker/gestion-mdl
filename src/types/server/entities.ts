@@ -15,13 +15,14 @@
  */
 
 export type TimePeriod = {
-    id: number;
+    '@id': string;
     displayName: string;
     startTime: string;
     endTime: string;
 };
 
 export type CardScan = {
+    '@id': string;
     code: string;
     date: string;
     timePeriodId: number;
@@ -29,7 +30,7 @@ export type CardScan = {
 };
 
 export type User = {
-    id: number;
+    '@id': string;
     firstname: string;
     lastname: string;
     grade: string;

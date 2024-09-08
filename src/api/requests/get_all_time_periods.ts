@@ -16,14 +16,17 @@
 
 import { API_URL } from '~/types/constants';
 import { TimePeriod } from '~/types/server/entities';
-import { BaseResponse } from '~/types/server/response';
 
-export const getTimePeriods = async (): Promise<TimePeriod[]> => {
-    const req = await fetch(`${API_URL}/api/time-periods/all`);
-    const data: BaseResponse<TimePeriod[]> = await req.json();
+export const get_all_time_periods = async (): Promise<TimePeriod[]> => {
+    const req = await fetch(`${API_URL}/api/time_periods`, {
+        headers: {
+            Accept: 'application/ld+json'
+        },
+        credentials: 'include'
+    });
 
-    if (req.status !== 200)
-        throw new Error(req.statusText + ' : ' + data.message);
+    if (!req.ok)
+        throw new Error(req.statusText);
 
-    return data.data || [];
+    return (await req.json())['hydra:member'];
 };

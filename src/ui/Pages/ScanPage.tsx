@@ -15,14 +15,14 @@
  */
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { getHistory, getTimePeriods } from '~/api';
+import { getHistory, get_all_time_periods } from '~/api';
 import { CardScan, TimePeriod } from '~/types/server/entities';
 import { UserSubscriptionTag } from '~/ui/Atoms';
 import { HourSelector, SortableTable } from '~/ui/Organisms';
 
 export const ScanPage = (): React.ReactElement => {
     const [hours, setHours] = useState<TimePeriod[]>();
-    const [selectedHour, setSelectedHour] = useState<number>();
+    const [selectedHour, setSelectedHour] = useState<string>();
     const [history, setHistory] = useState<CardScan[]>();
     const [isLoaded, setLoaded] = useState<boolean>(false);
 
@@ -30,9 +30,12 @@ export const ScanPage = (): React.ReactElement => {
      * Fetch time periods when the page is loaded
      */
     useEffect(() => {
-        getTimePeriods().then(t => {
+        get_all_time_periods().then(t => {
+            if (t.length === 0)
+                return;
+
             setHours(t);
-            setSelectedHour(t[0].id);
+            setSelectedHour(t[0]['@id']);
         });
     }, []);
 
@@ -40,9 +43,9 @@ export const ScanPage = (): React.ReactElement => {
      * Refetch the history when time period is changed
      */
     useEffect(() => {
-        if (selectedHour === 0 || selectedHour === undefined) return;
+        if (selectedHour === undefined || selectedHour === undefined) return;
 
-        getHistory({ timePeriodId: selectedHour }).then(h => {
+        getHistory({ timePeriodId: selectedHour, date: new Date() }).then(h => {
             setHistory(h);
             setLoaded(true);
         });
@@ -53,7 +56,7 @@ export const ScanPage = (): React.ReactElement => {
      */
     const onHourSelectorChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) =>
-            setSelectedHour(+e.target.value),
+            setSelectedHour(e.target.value),
         []
     );
 
@@ -75,7 +78,7 @@ export const ScanPage = (): React.ReactElement => {
                 columns={[
                     {
                         label: 'Code',
-                        key: 'code',
+                        key: 'user.code',
                         sortable: true,
                         sortFunction: (a, b) =>
                             +((a as string).match(/\d+/) || 0) <

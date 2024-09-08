@@ -17,32 +17,22 @@
 import { API_URL } from '~/types/constants';
 import { CardScan } from '~/types/server/entities';
 import { GetHistoryRequest } from '~/types/server/requests';
-import { BaseResponse } from '~/types/server/response';
 
 export const getHistory = async (
     req: GetHistoryRequest
 ): Promise<CardScan[]> => {
-    const reqData = new FormData();
-    const date = new Date();
-    reqData.append('timePeriodId', req.timePeriodId.toString());
-    reqData.append(
-        'date',
-        req.date ||
-            `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
-    );
-
-    const historyReq = await fetch(`${API_URL}/api/scans/get`, {
-        method: 'POST',
+    const fReq = await fetch(`${API_URL}/api/card_scans/history?date=${req.date?.toISOString()}&timePeriod=${req.timePeriodId}`, {
         headers: {
-            Accept: 'application/json'
+            Accept: 'application/ld+json'
         },
-        body: reqData
+        credentials: 'include'
     });
 
-    const data: BaseResponse<CardScan[]> = await historyReq.json();
+    if (!fReq.ok) {
+        throw new Error(fReq.statusText);
+    }
 
-    if (data.status !== 'ok')
-        throw new Error(historyReq.statusText + ' : ' + data.message);
+    const body = await fReq.json();
 
-    return data.data || [];
+    return body['hydra:member'];
 };

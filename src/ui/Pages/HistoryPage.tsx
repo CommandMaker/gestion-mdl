@@ -18,18 +18,13 @@ import React, { useEffect, useState } from 'react';
 import { DatePicker, Input, type DatePickerProps } from 'antd';
 import { HourSelector, SortableTable } from '~/ui/Organisms';
 import { CardScan, TimePeriod } from '~/types/server/entities';
-import { getHistory, getTimePeriods } from '~/api';
+import { getHistory, get_all_time_periods } from '~/api';
 import { UserSubscriptionTag } from '~/ui/Atoms';
-
-type HistoryRequest = {
-    date: string;
-    timePeriodId: number;
-};
+import { GetHistoryRequest } from '~/types/server/requests';
 
 export const HistoryPage = (): React.ReactElement => {
-    const [requestData, setRequestData] = useState<HistoryRequest>({
-        date: 'nope',
-        timePeriodId: 0
+    const [requestData, setRequestData] = useState<GetHistoryRequest>({
+        timePeriodId: '',
     });
     const [timePeriods, setTimePeriods] = useState<TimePeriod[]>([]);
     const [history, setHistory] = useState<CardScan[]>([]);
@@ -39,11 +34,11 @@ export const HistoryPage = (): React.ReactElement => {
      * Fetch the time periods when page is loaded
      */
     useEffect(() => {
-        getTimePeriods().then(d => {
+        get_all_time_periods().then(d => {
             setTimePeriods(d);
 
             d.length > 0
-                ? setRequestData(s => ({ ...s, timePeriodId: d[0].id }))
+                ? setRequestData(s => ({ ...s, timePeriodId: d[0]['@id'] }))
                 : undefined;
         });
     }, []);
@@ -56,14 +51,14 @@ export const HistoryPage = (): React.ReactElement => {
      * Fetch the history if all data are filled
      */
     useEffect(() => {
-        if (requestData.date === 'nope' && requestData.timePeriodId === 0)
+        if (requestData.date === undefined || requestData.timePeriodId === '')
             return;
 
         getHistory(requestData).then(d => setHistory(d));
     }, [requestData]);
 
     const onChange: DatePickerProps['onChange'] = (_, dateString) => {
-        setRequestData(s => ({ ...s, date: dateString as string }));
+        setRequestData(s => ({ ...s, date: new Date(dateString as string) }));
     };
 
     return (
@@ -80,7 +75,7 @@ export const HistoryPage = (): React.ReactElement => {
                 onChange={e =>
                     setRequestData(s => ({
                         ...s,
-                        timePeriodId: +e.target.value
+                        timePeriodId: e.target.value
                     }))
                 }
             />
@@ -120,7 +115,7 @@ export const HistoryPage = (): React.ReactElement => {
                 columns={[
                     {
                         label: 'Code',
-                        key: 'code',
+                        key: 'user.code',
                         sortable: true,
                         sortFunction: (a, b) =>
                             +((a as string).match(/\d+/) || 0) <

@@ -7,6 +7,7 @@ export { get_user } from './requests/get_user';
 export { delete_user } from './requests/delete_user';
 export { getHistory } from './requests/get_history';
 export { get_all_subscription_types } from './requests/get_all_subscription_types';
+export { post_scan_card } from './requests/post_scan_card';
 export { post_create_user } from './requests/post_create_user';
 export { post_login_user } from './requests/post_login_user';
 export { patch_edit_user } from './requests/patch_edit_user';

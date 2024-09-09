@@ -29,7 +29,9 @@ type UserEditModalProps = {
 }
 
 export const UserEditModal = ({ user, onClose }: UserEditModalProps) => {
-    const [userData, setUserData] = useState<UserData>(user ? omit(user, ['subscriptionEnd', 'subscriptionValidity', 'subscriptionType', 'password']) : {});
+    const [userData, setUserData] = useState<UserData>(user ? omit(user, ['subscriptionEnd', 'subscriptionValidity', 'subscriptionType', 'password']) : {
+        gender: 'male'
+    });
     const [subscriptionTypes, setSubscriptionTypes] = useState<SubscriptionType[]>();
 
     const submitUser = useCallback(() => {

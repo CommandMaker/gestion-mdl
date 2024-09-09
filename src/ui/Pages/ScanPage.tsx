@@ -14,8 +14,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { Input } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { getHistory, get_all_time_periods } from '~/api';
+import { post_scan_card } from '~/api/requests/post_scan_card';
 import { CardScan, TimePeriod } from '~/types/server/entities';
 import { UserSubscriptionTag } from '~/ui/Atoms';
 import { HourSelector, SortableTable } from '~/ui/Organisms';
@@ -25,6 +27,7 @@ export const ScanPage = (): React.ReactElement => {
     const [selectedHour, setSelectedHour] = useState<string>();
     const [history, setHistory] = useState<CardScan[]>();
     const [isLoaded, setLoaded] = useState<boolean>(false);
+    const [code, setCode] = useState<string>('');
 
     /**
      * Fetch time periods when the page is loaded
@@ -59,6 +62,15 @@ export const ScanPage = (): React.ReactElement => {
         []
     );
 
+    const scanCard = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        post_scan_card(code, selectedHour || '')
+            .then(d => {
+                setHistory(s => [...(s || []), d]);
+            });
+    }, [code, selectedHour]);
+
     return isLoaded ? (
         <main>
             <h1>Entrées du foyer</h1>
@@ -70,6 +82,10 @@ export const ScanPage = (): React.ReactElement => {
             />
 
             <div style={{ width: '100%', margin: '1rem 0' }} aria-hidden />
+
+            <form action="#" onSubmit={scanCard}>
+                <Input id="card_scan" placeholder="Scanner une carte" autoFocus value={code} onChange={e => setCode(e.target.value)} />
+            </form>
 
             <SortableTable
                 data={history || []}

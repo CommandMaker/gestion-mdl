@@ -45,7 +45,7 @@ export const ScanPage = (): React.ReactElement => {
      * Refetch the history when time period is changed
      */
     useEffect(() => {
-        if (selectedHour === undefined || selectedHour === undefined) return;
+        if (selectedHour === undefined) return;
 
         getHistory({ timePeriodId: selectedHour, date: new Date() }).then(h => {
             setHistory(h);

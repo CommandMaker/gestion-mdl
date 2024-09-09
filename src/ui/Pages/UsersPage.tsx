@@ -67,7 +67,7 @@ export const UsersPage = (): React.ReactElement => {
     }, []);
 
     const onUserEdit = useCallback((user: User) => {
-        setModal(<UserEditModal user={user} onClose={handleModalShowChange} />)
+        setModal(<UserEditModal user={user} onClose={handleModalShowChange} />);
     }, []);
 
     const onUserCardDump = useCallback((user: User) => {
@@ -76,11 +76,13 @@ export const UsersPage = (): React.ReactElement => {
 
     const openRegisterModal = useCallback(() => {
         setModal(
-            <UserEditModal onClose={() => {
-                handleModalShowChange();
-                setUsers(undefined);
-            }} />
-        )
+            <UserEditModal
+                onClose={() => {
+                    handleModalShowChange();
+                    setUsers(undefined);
+                }}
+            />
+        );
     }, []);
 
     /**
@@ -98,7 +100,11 @@ export const UsersPage = (): React.ReactElement => {
 
             {modal}
 
-            <FilledButton label="Inscrire un nouvel adhérent" style={{marginBottom: '1rem'}} onClick={openRegisterModal} />
+            <FilledButton
+                label="Inscrire un nouvel adhérent"
+                style={{ marginBottom: '1rem' }}
+                onClick={openRegisterModal}
+            />
 
             {users !== undefined ? (
                 <SortableTable

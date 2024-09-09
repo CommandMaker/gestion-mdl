@@ -28,6 +28,5 @@ export const patch_edit_user = async (user: UserData): Promise<void> => {
         body: JSON.stringify(user)
     });
 
-    if (!req.ok)
-        throw new Error(req.statusText);
-}
+    if (!req.ok) throw new Error(req.statusText);
+};

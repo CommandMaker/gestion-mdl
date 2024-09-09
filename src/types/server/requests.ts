@@ -29,4 +29,4 @@ export type UserData = {
     subscriptionType?: string;
     isAdmin?: boolean;
     password?: string;
-}
+};

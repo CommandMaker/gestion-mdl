@@ -14,10 +14,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { API_URL } from "~/types/constants";
-import { SubscriptionType } from "~/types/server/entities";
+import { API_URL } from '~/types/constants';
+import { SubscriptionType } from '~/types/server/entities';
 
-export const get_all_subscription_types = async (): Promise<SubscriptionType[]> => {
+export const get_all_subscription_types = async (): Promise<
+    SubscriptionType[]
+> => {
     const req = await fetch(`${API_URL}/api/subscription_types`, {
         headers: {
             Accept: 'application/ld+json'
@@ -25,8 +27,7 @@ export const get_all_subscription_types = async (): Promise<SubscriptionType[]> 
         credentials: 'include'
     });
 
-    if (!req.ok)
-        throw new Error(req.statusText);
+    if (!req.ok) throw new Error(req.statusText);
 
     return (await req.json())['hydra:member'];
 };

@@ -17,7 +17,10 @@
 import { API_URL } from '~/types/constants';
 import { CardScan } from '~/types/server/entities';
 
-export const post_scan_card = async (cardCode: string, timePeriod: string): Promise<CardScan> => {
+export const post_scan_card = async (
+    cardCode: string,
+    timePeriod: string
+): Promise<CardScan> => {
     const req = await fetch(`${API_URL}/api/card_scans`, {
         method: 'POST',
         headers: {
@@ -32,8 +35,7 @@ export const post_scan_card = async (cardCode: string, timePeriod: string): Prom
         credentials: 'include'
     });
 
-    if (!req.ok)
-        throw new Error(req.statusText);
+    if (!req.ok) throw new Error(req.statusText);
 
     return await req.json();
-}
+};

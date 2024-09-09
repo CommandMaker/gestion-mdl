@@ -47,4 +47,4 @@ export type SubscriptionType = {
     '@id': string;
     displayName: string;
     duration?: string;
-}
+};

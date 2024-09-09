@@ -62,14 +62,16 @@ export const ScanPage = (): React.ReactElement => {
         []
     );
 
-    const scanCard = useCallback((e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-        post_scan_card(code, selectedHour || '')
-            .then(d => {
+    const scanCard = useCallback(
+        (e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            e.stopPropagation();
+            post_scan_card(code, selectedHour || '').then(d => {
                 setHistory(s => [...(s || []), d]);
             });
-    }, [code, selectedHour]);
+        },
+        [code, selectedHour]
+    );
 
     return isLoaded ? (
         <main>
@@ -84,7 +86,13 @@ export const ScanPage = (): React.ReactElement => {
             <div style={{ width: '100%', margin: '1rem 0' }} aria-hidden />
 
             <form action="#" onSubmit={scanCard}>
-                <Input id="card_scan" placeholder="Scanner une carte" autoFocus value={code} onChange={e => setCode(e.target.value)} />
+                <Input
+                    id="card_scan"
+                    placeholder="Scanner une carte"
+                    autoFocus
+                    value={code}
+                    onChange={e => setCode(e.target.value)}
+                />
             </form>
 
             <SortableTable

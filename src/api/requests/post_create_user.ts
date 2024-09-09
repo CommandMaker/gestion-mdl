@@ -28,6 +28,5 @@ export const post_create_user = async (userData: UserData): Promise<void> => {
         credentials: 'include'
     });
 
-    if (!req.ok)
-        throw new Error(req.statusText);
-}
+    if (!req.ok) throw new Error(req.statusText);
+};

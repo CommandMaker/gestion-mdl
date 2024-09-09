@@ -18,3 +18,15 @@ export type GetHistoryRequest = {
     date?: Date;
     timePeriodId: string;
 };
+
+export type UserData = {
+    '@id'?: string;
+    firstname?: string;
+    lastname?: string;
+    grade?: string;
+    code?: string;
+    gender?: string;
+    subscriptionType?: string;
+    isAdmin?: boolean;
+    password?: string;
+}

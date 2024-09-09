@@ -14,37 +14,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export type TimePeriod = {
-    '@id': string;
-    displayName: string;
-    startTime: string;
-    endTime: string;
-};
+import { API_URL } from "~/types/constants";
+import { SubscriptionType } from "~/types/server/entities";
 
-export type CardScan = {
-    '@id': string;
-    code: string;
-    date: string;
-    timePeriodId: number;
-    user: User;
-};
+export const get_all_subscription_types = async (): Promise<SubscriptionType[]> => {
+    const req = await fetch(`${API_URL}/api/subscription_types`, {
+        headers: {
+            Accept: 'application/ld+json'
+        },
+        credentials: 'include'
+    });
 
-export type User = {
-    '@id': string;
-    firstname: string;
-    lastname: string;
-    grade: string;
-    code: string;
-    gender: string;
-    subscriptionType: SubscriptionType;
-    subscriptionEnd: string;
-    subscriptionValidity: boolean;
-    isAdmin: boolean;
-    password: string;
-};
+    if (!req.ok)
+        throw new Error(req.statusText);
 
-export type SubscriptionType = {
-    '@id': string;
-    displayName: string;
-    duration?: string;
-}
+    return (await req.json())['hydra:member'];
+};

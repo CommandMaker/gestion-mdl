@@ -3,4 +3,5 @@
 export { Dashboard } from './Dashboard';
 export { HourSelector } from './HourSelector';
 export { Modal } from './Modal';
+export { UserEditModal } from './UserEditModal';
 export { SortableTable } from './SortableTable';

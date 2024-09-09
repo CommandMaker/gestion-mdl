@@ -128,7 +128,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     public function setFirstname(string $firstname): static
     {
-        $this->firstname = $firstname;
+        $this->firstname = mb_strtoupper(mb_substr($firstname, 0, 1)) . mb_substr($firstname, 1);
 
         return $this;
     }
@@ -140,7 +140,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     public function setLastname(string $lastname): static
     {
-        $this->lastname = $lastname;
+        $this->lastname = mb_strtoupper($lastname);
 
         return $this;
     }

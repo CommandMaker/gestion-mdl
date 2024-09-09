@@ -14,37 +14,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export type TimePeriod = {
-    '@id': string;
-    displayName: string;
-    startTime: string;
-    endTime: string;
-};
+import { API_URL } from '~/types/constants';
+import { UserData } from '~/types/server/requests';
 
-export type CardScan = {
-    '@id': string;
-    code: string;
-    date: string;
-    timePeriodId: number;
-    user: User;
-};
+export const patch_edit_user = async (user: UserData): Promise<void> => {
+    const req = await fetch(`${API_URL}${user['@id']}`, {
+        method: 'PATCH',
+        headers: {
+            Accept: 'application/ld+json',
+            'Content-Type': 'application/merge-patch+json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(user)
+    });
 
-export type User = {
-    '@id': string;
-    firstname: string;
-    lastname: string;
-    grade: string;
-    code: string;
-    gender: string;
-    subscriptionType: SubscriptionType;
-    subscriptionEnd: string;
-    subscriptionValidity: boolean;
-    isAdmin: boolean;
-    password: string;
-};
-
-export type SubscriptionType = {
-    '@id': string;
-    displayName: string;
-    duration?: string;
+    if (!req.ok)
+        throw new Error(req.statusText);
 }

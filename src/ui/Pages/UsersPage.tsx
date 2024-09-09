@@ -23,7 +23,7 @@ import {
     UserManagementActions,
     UserSubscriptionTag
 } from '~/ui/Atoms';
-import { Modal, SortableTable } from '~/ui/Organisms';
+import { Modal, SortableTable, UserEditModal } from '~/ui/Organisms';
 
 export const UsersPage = (): React.ReactElement => {
     const [users, setUsers] = useState<User[]>();
@@ -37,12 +37,13 @@ export const UsersPage = (): React.ReactElement => {
         const action = () => {
             delete_user(user).then(_ => {
                 handleModalShowChange();
-                setUsers(u => u?.filter(u1 => u1['@id'] !== user['@id']));
+                setUsers(undefined);
             });
         };
 
         setModal(
             <Modal
+                wrapperId="confirmDelete"
                 onClose={handleModalShowChange}
                 title="Confirmer"
                 buttons={
@@ -66,25 +67,38 @@ export const UsersPage = (): React.ReactElement => {
     }, []);
 
     const onUserEdit = useCallback((user: User) => {
-        console.log('Edited');
+        setModal(<UserEditModal user={user} onClose={handleModalShowChange} />)
     }, []);
 
     const onUserCardDump = useCallback((user: User) => {
         window.open(`${API_URL}${user['@id']}/card`, '_blank');
     }, []);
 
+    const openRegisterModal = useCallback(() => {
+        setModal(
+            <UserEditModal onClose={() => {
+                handleModalShowChange();
+                setUsers(undefined);
+            }} />
+        )
+    }, []);
+
     /**
      * Fetch users from the API when the page is loaded
      */
     useEffect(() => {
+        if (users !== undefined) return;
+
         get_all_users().then(users => setUsers(users));
-    }, []);
+    }, [users]);
 
     return (
         <main>
             <h1>Gestion des adhérents</h1>
 
             {modal}
+
+            <FilledButton label="Inscrire un nouvel adhérent" style={{marginBottom: '1rem'}} onClick={openRegisterModal} />
 
             {users !== undefined ? (
                 <SortableTable

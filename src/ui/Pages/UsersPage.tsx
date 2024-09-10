@@ -112,17 +112,6 @@ export const UsersPage = (): React.ReactElement => {
                     data={users}
                     columns={[
                         {
-                            label: 'Code',
-                            key: 'code',
-                            sortable: true,
-                            sortFunction: (a, b) =>
-                                +((a as string).match(/\d+/) || 0) <
-                                +((b as string).match(/\d+/) || 0)
-                                    ? -1
-                                    : 1,
-                            width: '150px'
-                        },
-                        {
                             label: 'Nom',
                             key: 'lastname',
                             sortable: true

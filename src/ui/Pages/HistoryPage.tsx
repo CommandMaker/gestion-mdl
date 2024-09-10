@@ -114,17 +114,6 @@ export const HistoryPage = (): React.ReactElement => {
                 data={filteredHistory}
                 columns={[
                     {
-                        label: 'Code',
-                        key: 'user.code',
-                        sortable: true,
-                        sortFunction: (a, b) =>
-                            +((a as string).match(/\d+/) || 0) <
-                            +((b as string).match(/\d+/) || 0)
-                                ? -1
-                                : 1,
-                        width: '150px'
-                    },
-                    {
                         label: 'Nom',
                         key: 'user.lastname',
                         sortable: true

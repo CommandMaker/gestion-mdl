@@ -13,6 +13,7 @@ use App\Repository\UserRepository;
 use App\State\PasswordHasherProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -87,7 +88,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[Groups(['user:write'])]
     private ?string $password = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['user:read', 'card_scan:read', 'user:write'])]
     private ?SubscriptionType $subscriptionType = null;
@@ -108,12 +109,17 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\OneToMany(targetEntity: Sanction::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $sanctions;
 
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[Groups(['user:read', 'card_scan:read'])]
+    private \DateTimeImmutable $createdAt;
+
     public function __construct()
     {
         $this->cardScans = new ArrayCollection;
         $this->sanctions = new ArrayCollection;
 
         $this->roles = ['ROLE_USER'];
+        $this->createdAt = new \DateTimeImmutable;
     }
 
     public function getId(): ?int
@@ -292,6 +298,32 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[Groups(['user:read', 'card_scan:read'])]
     public function getSubscriptionValidity(): bool
     {
-        return $this->getSubscriptionType()->getDuration() === null;
+        if ($this->getSubscriptionType() === null) {
+            return false;
+        }
+
+        if ($this->getSubscriptionType()->getDuration() === null) {
+            return true;
+        }
+
+        $interval = \DateInterval::createFromDateString($this->getSubscriptionType()->getDuration());
+
+        if ($this->createdAt->add($interval ?: new \DateInterval('')) >= new \DateTimeImmutable()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->createdAt = $created_at;
+
+        return $this;
     }
 }

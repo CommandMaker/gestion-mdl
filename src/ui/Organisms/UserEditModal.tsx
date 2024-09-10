@@ -207,7 +207,7 @@ export const UserEditModal = ({ user, onClose }: UserEditModalProps) => {
                             }
                             value={userData.subscriptionType}
                             onChange={e =>
-                                setUserData(s => ({ ...s, gender: e }))
+                                setUserData(s => ({ ...s, subscriptionType: e }))
                             }
                         />
                     </div>

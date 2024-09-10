@@ -288,4 +288,10 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     {
         return $this->code ?? '';
     }
+
+    #[Groups(['user:read', 'card_scan:read'])]
+    public function getSubscriptionValidity(): bool
+    {
+        return $this->getSubscriptionType()->getDuration() === null;
+    }
 }

@@ -16,24 +16,24 @@
 
 :root {
     /* Colors */
-    --white-1: #f0f0f3;
-    --white-2: #eee;
+    --white-1: #233037;
+    --white-2: #1c262b;
 
-    --blue-gray-400: #728ab7;
-    --blue-gray-700: #2b3951;
+    --blue-gray-400: #bd9e57;
+    --blue-gray-700: var(--blue-gray-400);
 
-    --gray-400: #d2e2ff;
-    --gray-400-rgb: 210, 226, 255;
+    --gray-400: #ffe3a2;
+    --gray-400-rgb: 255, 227, 162;
 
     --red-700: #a33d3d;
     --red-400: #fb7575;
     --red-200: #ffc8c8;
     --red-200-rgb: 255, 200, 200;
 
-    --shadow-dark: rgba(174, 174, 192, 0.4);
-    --shadow-dark-inset: rgba(174, 174, 192, 0.2);
-    --shadow-light: rgba(255, 255, 255, 0.7);
-    --shadow-light-full: #fff;
+    --shadow-dark: rgba(22, 29, 33, 0.4);
+    --shadow-dark-inset: rgba(22, 29, 33, 0.2);
+    --shadow-light: rgba(53, 71, 80, 0.7);
+    --shadow-light-full: #354750;
 
     /* Texts */
     --font-family: 'Inter', sans-serif;

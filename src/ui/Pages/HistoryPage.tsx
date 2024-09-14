@@ -93,7 +93,6 @@ export const HistoryPage = (): React.ReactElement => {
                     }
 
                     const search = e.target.value.toLocaleLowerCase();
-                    console.log(search);
                     setFilteredHistory(
                         history.filter(
                             s =>

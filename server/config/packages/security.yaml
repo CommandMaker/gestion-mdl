@@ -33,7 +33,8 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/api/users, roles: PUBLIC_ACCESS, method: [GET] }
+        - { path: ^/api/users, roles: PUBLIC_ACCESS, methods: [GET] }
+        - { path: ^/api/card_scans, roles: PUBLIC_ACCESS, methods: [POST] }
         - { path: ^/api/?$, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: ROLE_USER }
 

@@ -107,47 +107,60 @@ export const UsersPage = (): React.ReactElement => {
             />
 
             {users !== undefined ? (
-                <SortableTable
-                    stripped
-                    data={users}
-                    columns={[
-                        {
-                            label: 'Nom',
-                            key: 'lastname',
-                            sortable: true
-                        },
-                        {
-                            label: 'Prénom',
-                            key: 'firstname',
-                            sortable: true
-                        },
-                        {
-                            label: 'Classe',
-                            key: 'grade'
-                        },
-                        {
-                            label: 'Abonnement',
-                            key: 'subscriptionType.displayName',
-                            width: '150px',
-                            renderElement: (user: User) => (
-                                <UserSubscriptionTag user={user} />
-                            )
-                        },
-                        {
-                            label: 'Actions',
-                            key: '',
-                            width: '200px',
-                            renderElement: (row: User) => (
-                                <UserManagementActions
-                                    user={row}
-                                    onDelete={onUserDelete}
-                                    onEdit={onUserEdit}
-                                    onCardDump={onUserCardDump}
-                                />
-                            )
-                        }
-                    ]}
-                />
+                <>
+                    <SortableTable
+                        stripped
+                        data={users}
+                        columns={[
+                            {
+                                label: 'Code',
+                                key: 'code',
+                                sortable: true,
+                                sortFunction: (a, b) =>
+                                    +((a as string).match(/\d+/) || 0) <
+                                        +((b as string).match(/\d+/) || 0)
+                                        ? -1
+                                        : 1,
+                                width: '150px'
+                            },
+                            {
+                                label: 'Nom',
+                                key: 'lastname',
+                                sortable: true
+                            },
+                            {
+                                label: 'Prénom',
+                                key: 'firstname',
+                                sortable: true
+                            },
+                            {
+                                label: 'Classe',
+                                key: 'grade'
+                            },
+                            {
+                                label: 'Abonnement',
+                                key: 'subscriptionType.displayName',
+                                width: '150px',
+                                renderElement: (user: User) => (
+                                    <UserSubscriptionTag user={user} />
+                                )
+                            },
+                            {
+                                label: 'Actions',
+                                key: '',
+                                width: '200px',
+                                renderElement: (row: User) => (
+                                    <UserManagementActions
+                                        user={row}
+                                        onDelete={onUserDelete}
+                                        onEdit={onUserEdit}
+                                        onCardDump={onUserCardDump}
+                                    />
+                                )
+                            }
+                        ]}
+                    />
+                </>
             ) : (
                 <p>Chargement ...</p>
             )}

@@ -36,7 +36,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ],
     ],
     operations: [
-        new GetCollection,
+        new GetCollection(
+            paginationEnabled: false
+        ),
         new Post(
             processor: PasswordHasherProcessor::class
         ),

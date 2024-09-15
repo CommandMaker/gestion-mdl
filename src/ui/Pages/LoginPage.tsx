@@ -22,10 +22,11 @@ import { post_login_user, get_all_users } from '~/api';
 import { useNavigate } from 'react-router-dom';
 import { MDLIcon } from '../Atoms/Icons/Icons';
 import { User } from '~/types/server/entities';
+import { useUserStore } from '~/stores';
 
 type UserData = {
-    username?: string;
-    password?: string;
+    username: string;
+    password: string;
 };
 
 type LoginUserSelectOption = {
@@ -34,18 +35,17 @@ type LoginUserSelectOption = {
 };
 
 export const LoginPage = (): React.ReactElement => {
-    const [userData, setUserData] = useState<UserData>({});
+    const [userData, setUserData] = useState<Partial<UserData>>({});
     const navigate = useNavigate();
     const [users, setUsers] = useState<User[] | undefined>();
+    const userStore = useUserStore();
 
     const loginUser = useCallback(
         (e: React.FormEvent) => {
             e.preventDefault();
             e.stopPropagation();
 
-            post_login_user(userData).then(_ => {
-                navigate('/');
-            });
+            userStore.login(userData as UserData).then(() => navigate('/'));
         },
         [userData]
     );

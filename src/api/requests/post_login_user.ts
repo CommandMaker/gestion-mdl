@@ -15,8 +15,9 @@
  */
 
 import { API_URL } from '~/types/constants';
+import { User } from '~/types/server/entities';
 
-export const post_login_user = async (userData: object): Promise<[]> => {
+export const post_login_user = async (userData: object): Promise<User> => {
     const r = await fetch(`${API_URL}/login`, {
         method: 'POST',
         body: JSON.stringify(userData),
@@ -26,8 +27,10 @@ export const post_login_user = async (userData: object): Promise<[]> => {
         },
         credentials: 'include'
     });
+
     if (r.ok) {
         return r.json();
     }
+
     throw new Error(r.statusText);
 };

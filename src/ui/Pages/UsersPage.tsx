@@ -67,7 +67,18 @@ export const UsersPage = (): React.ReactElement => {
     }, []);
 
     const onUserEdit = useCallback((user: User) => {
-        setModal(<UserEditModal user={user} onClose={handleModalShowChange} />);
+        setModal(<UserEditModal user={user} onClose={u => {
+            handleModalShowChange()
+
+            if (u === undefined) return;
+            const index = users!.indexOf(users!.filter(us => us['@id'] === u['@id'])[0]);
+
+            setUsers(s => {
+                s![index] = u;
+
+                return s;
+            });
+        }} />);
     }, []);
 
     const onUserCardDump = useCallback((user: User) => {

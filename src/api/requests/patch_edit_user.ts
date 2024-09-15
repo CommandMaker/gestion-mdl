@@ -15,9 +15,10 @@
  */
 
 import { API_URL } from '~/types/constants';
+import { User } from '~/types/server/entities';
 import { UserData } from '~/types/server/requests';
 
-export const patch_edit_user = async (user: UserData): Promise<void> => {
+export const patch_edit_user = async (user: UserData): Promise<User> => {
     const req = await fetch(`${API_URL}${user['@id']}`, {
         method: 'PATCH',
         headers: {
@@ -29,4 +30,6 @@ export const patch_edit_user = async (user: UserData): Promise<void> => {
     });
 
     if (!req.ok) throw new Error(req.statusText);
+
+    return await req.json();
 };

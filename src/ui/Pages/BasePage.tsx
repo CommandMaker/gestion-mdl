@@ -14,32 +14,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import Styles from './BasePage.module.scss';
 import { Dashboard } from '~/ui/Organisms/Dashboard';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { get_user } from '~/api';
-import { User } from '~/types/server/entities';
+import { useUserStore } from '~/stores';
 
 export const BasePage = (): React.ReactElement => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [user, setUser] = useState<User>();
+    const userStore = useUserStore();
 
     useEffect(() => {
         if (location.pathname === '/login') return;
 
-        get_user()
-            .then(user => setUser(user))
-            .catch(_ => {
-                navigate('/login');
-            });
+        if (userStore.user === undefined) {
+            navigate('/login');
+        }
     }, [location]);
 
-    return user ? (
+    return userStore.user ? (
         <div className={Styles.GridContainer}>
-            <Dashboard user={user!} />
+            <Dashboard />
             <Outlet />
         </div>
     ) : (

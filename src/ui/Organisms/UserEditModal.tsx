@@ -14,22 +14,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { SubscriptionType, User } from '~/types/server/entities';
+import { User } from '~/types/server/entities';
 import { Modal } from '~/ui/Organisms';
 import { FilledButton } from '../Atoms';
 import { useCallback, useEffect, useState } from 'react';
 import { omit } from '~/utils';
 import { Checkbox, Input, Select } from 'antd';
 import {
-    get_all_subscription_types,
     patch_edit_user,
     post_create_user
 } from '~/api';
 import { UserData } from '~/types/server/requests';
+import { useSubscriptionTypeStore } from '~/stores';
 
 type UserEditModalProps = {
     user?: User;
-    onClose: () => void;
+    onClose: (user?: User) => void;
 };
 
 export const UserEditModal = ({ user, onClose }: UserEditModalProps) => {
@@ -45,24 +45,23 @@ export const UserEditModal = ({ user, onClose }: UserEditModalProps) => {
                   gender: 'male'
               }
     );
-    const [subscriptionTypes, setSubscriptionTypes] =
-        useState<SubscriptionType[]>();
+    const subscriptionTypeStore = useSubscriptionTypeStore();
 
     const submitUser = useCallback(() => {
         if (user) {
-            patch_edit_user(userData).then(() => onClose());
+            patch_edit_user(userData).then(onClose);
 
             return;
         }
 
-        post_create_user(userData).then(() => onClose());
+        post_create_user(userData).then(onClose);
     }, [userData]);
 
     useEffect(() => {
-        get_all_subscription_types().then(st => {
-            setSubscriptionTypes(st);
-            setUserData(s => ({ ...s, subscriptionType: st[0]['@id'] || '' }));
-        });
+        //            setUserData(s => ({ ...s, subscriptionType: st[0]['@id'] || '' }));
+        //
+
+        subscriptionTypeStore.fetchData();
 
         user
             ? setUserData(s => ({
@@ -72,7 +71,7 @@ export const UserEditModal = ({ user, onClose }: UserEditModalProps) => {
             : undefined;
     }, []);
 
-    return subscriptionTypes ? (
+    return subscriptionTypeStore.subscriptionTypes ? (
         <Modal
             onClose={onClose}
             wrapperId="editModal"
@@ -198,12 +197,12 @@ export const UserEditModal = ({ user, onClose }: UserEditModalProps) => {
                         </label>
                         <Select
                             id="subscriptionType"
-                            options={subscriptionTypes.map(st => ({
+                            options={subscriptionTypeStore.subscriptionTypes!.map(st => ({
                                 label: st.displayName,
                                 value: st['@id']
                             }))}
                             defaultValue={
-                                subscriptionTypes[0]['@id'] || undefined
+                                subscriptionTypeStore.subscriptionTypes![0]['@id'] || undefined
                             }
                             value={userData.subscriptionType}
                             onChange={e =>

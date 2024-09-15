@@ -28,16 +28,16 @@ import {
     RightFromBracketIcon
 } from '~/ui/Atoms';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { User } from '~/types/server/entities';
-import { get_logout } from '~/api';
 import { MDLIcon } from '../Atoms/Icons/Icons';
+import { useUserStore } from '~/stores';
 
-export const Dashboard = ({ user }: { user: User }): React.ReactElement => {
+export const Dashboard = (): React.ReactElement => {
     const { pathname: location } = useLocation();
     const navigate = useNavigate();
+    const userStore = useUserStore();
 
     const handleLogout = useCallback(() => {
-        get_logout().then(_ => navigate('/login'));
+        userStore.logout().then(() => navigate('/login'));
     }, []);
 
     return (
@@ -64,7 +64,7 @@ export const Dashboard = ({ user }: { user: User }): React.ReactElement => {
                     <p style={{ fontSize: '0.80rem' }}>
                         Connecté en tant que{' '}
                         <strong style={{ fontSize: '0.80rem' }}>
-                            {user.firstname} {user.lastname}
+                            {userStore.user!.firstname} {userStore.user!.lastname}
                         </strong>
                     </p>
                 </div>

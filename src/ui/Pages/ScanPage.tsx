@@ -15,27 +15,26 @@
  */
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { getHistory, get_all_time_periods } from '~/api';
-import { CardScan, TimePeriod } from '~/types/server/entities';
+import { getHistory } from '~/api';
+import { useSubscriptionTypeStore, useTimePeriodsStore } from '~/stores';
+import { CardScan } from '~/types/server/entities';
 import { UserSubscriptionTag } from '~/ui/Atoms';
 import { HourSelector, SortableTable } from '~/ui/Organisms';
 import { omit } from '~/utils';
 
 export const ScanPage = (): React.ReactElement => {
-    const [hours, setHours] = useState<TimePeriod[]>();
     const [selectedHour, setSelectedHour] = useState<string>();
     const [history, setHistory] = useState<CardScan[]>([]);
     const [isLoaded, setLoaded] = useState<boolean>(false);
+    const timePeriodsStore = useTimePeriodsStore();
 
     /**
      * Fetch time periods when the page is loaded
      */
     useEffect(() => {
-        get_all_time_periods().then(t => {
-            if (t.length === 0) return;
-
-            setHours(t);
-            setSelectedHour(t[0]['@id']);
+        timePeriodsStore.fetchData().then(tps => {
+            console.log(tps);
+            setSelectedHour(tps[0]['@id']);
         });
 
         const socket = new WebSocket('ws://localhost:8080');
@@ -77,7 +76,7 @@ export const ScanPage = (): React.ReactElement => {
 
             <HourSelector
                 name="hours"
-                data={hours || []}
+                data={timePeriodsStore.timePeriods || []}
                 onChange={onHourSelectorChange}
             />
 

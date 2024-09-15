@@ -15,9 +15,10 @@
  */
 
 import { API_URL } from '~/types/constants';
+import { User } from '~/types/server/entities';
 import { UserData } from '~/types/server/requests';
 
-export const post_create_user = async (userData: UserData): Promise<void> => {
+export const post_create_user = async (userData: UserData): Promise<User> => {
     const req = await fetch(`${API_URL}/api/users`, {
         method: 'POST',
         headers: {
@@ -29,4 +30,6 @@ export const post_create_user = async (userData: UserData): Promise<void> => {
     });
 
     if (!req.ok) throw new Error(req.statusText);
+
+    return await req.json();
 };

@@ -22,7 +22,7 @@ import { TimePeriod } from '~/types/server/entities';
 type TimePeriodsStore = {
     timePeriods?: TimePeriod[];
     fetchData: () => Promise<TimePeriod[]>;
-}
+};
 
 export const useTimePeriodsStore = create<TimePeriodsStore>()(
     persist(
@@ -33,7 +33,7 @@ export const useTimePeriodsStore = create<TimePeriodsStore>()(
 
                 const timePeriods = await get_all_time_periods();
 
-                set({timePeriods: timePeriods});
+                set({ timePeriods: timePeriods });
 
                 return timePeriods;
             }
@@ -43,4 +43,4 @@ export const useTimePeriodsStore = create<TimePeriodsStore>()(
             storage: createJSONStorage(() => sessionStorage)
         }
     )
-)
+);

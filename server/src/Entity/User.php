@@ -310,7 +310,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
         $interval = \DateInterval::createFromDateString($this->getSubscriptionType()->getDuration());
 
-        if ($this->createdAt->add($interval ?: new \DateInterval('')) >= new \DateTimeImmutable()) {
+        if ($this->createdAt->add($interval ?: new \DateInterval('')) >= new \DateTimeImmutable) {
             return true;
         }
 

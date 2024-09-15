@@ -67,18 +67,25 @@ export const UsersPage = (): React.ReactElement => {
     }, []);
 
     const onUserEdit = useCallback((user: User) => {
-        setModal(<UserEditModal user={user} onClose={u => {
-            handleModalShowChange()
+        setModal(
+            <UserEditModal
+                user={user}
+                onClose={u => {
+                    handleModalShowChange();
 
-            if (u === undefined) return;
-            const index = users!.indexOf(users!.filter(us => us['@id'] === u['@id'])[0]);
+                    if (u === undefined) return;
+                    const index = users!.indexOf(
+                        users!.filter(us => us['@id'] === u['@id'])[0]
+                    );
 
-            setUsers(s => {
-                s![index] = u;
+                    setUsers(s => {
+                        s![index] = u;
 
-                return s;
-            });
-        }} />);
+                        return s;
+                    });
+                }}
+            />
+        );
     }, []);
 
     const onUserCardDump = useCallback((user: User) => {
@@ -129,7 +136,7 @@ export const UsersPage = (): React.ReactElement => {
                                 sortable: true,
                                 sortFunction: (a, b) =>
                                     +((a as string).match(/\d+/) || 0) <
-                                        +((b as string).match(/\d+/) || 0)
+                                    +((b as string).match(/\d+/) || 0)
                                         ? -1
                                         : 1,
                                 width: '150px'

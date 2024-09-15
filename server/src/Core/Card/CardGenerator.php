@@ -28,6 +28,7 @@ class CardGenerator
 
         /** @var string */
         $color = 'bd9e57';
+        /** @var string */
         $qrCode = (new QRCode($options))->render($user->getCode());
         $a = str_replace('data:image/png;base64,', '', $qrCode);
         $qrCodeSize = 600;

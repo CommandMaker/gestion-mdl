@@ -22,7 +22,7 @@ import { SubscriptionType } from '~/types/server/entities';
 type SubscriptionTypeStore = {
     subscriptionTypes?: SubscriptionType[];
     fetchData: () => Promise<void>;
-}
+};
 
 export const useSubscriptionTypeStore = create<SubscriptionTypeStore>()(
     persist(
@@ -33,7 +33,7 @@ export const useSubscriptionTypeStore = create<SubscriptionTypeStore>()(
 
                 const subscriptionTypes = await get_all_subscription_types();
 
-                set({subscriptionTypes});
+                set({ subscriptionTypes });
             }
         }),
         {
@@ -41,4 +41,4 @@ export const useSubscriptionTypeStore = create<SubscriptionTypeStore>()(
             storage: createJSONStorage(() => sessionStorage)
         }
     )
-)
+);

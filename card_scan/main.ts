@@ -56,7 +56,7 @@ async function main(): Promise<void> {
         port: 8080
     });
 
-    server.on('connection', (connection) => {
+    server.on('connection', connection => {
         const callback = async (data: any): Promise<void> => {
             const cardData = data.toString('utf-8').replace('\r', '');
             const timePeriod = getCurrentTimePeriod(timePeriods);
@@ -68,13 +68,16 @@ async function main(): Promise<void> {
             };
 
             try {
-                const response = await fetch('http://localhost:8000/api/card_scans', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/ld+json'
-                    },
-                    body: JSON.stringify(payload)
-                });
+                const response = await fetch(
+                    'http://localhost:8000/api/card_scans',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/ld+json'
+                        },
+                        body: JSON.stringify(payload)
+                    }
+                );
 
                 if (!response.ok) {
                     throw new Error(`Error: ${response.statusText}`);
@@ -84,13 +87,13 @@ async function main(): Promise<void> {
             } catch (error) {
                 console.error('Error sending data:', error);
             }
-        }
+        };
         port.on('data', callback);
 
         connection.on('close', () => {
             port.removeListener('data', callback);
-        })
+        });
     });
 }
 
-main().catch((error) => console.error('Error:', error));
+main().catch(error => console.error('Error:', error));

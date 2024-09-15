@@ -20,10 +20,7 @@ import { FilledButton } from '../Atoms';
 import { useCallback, useEffect, useState } from 'react';
 import { omit } from '~/utils';
 import { Checkbox, Input, Select } from 'antd';
-import {
-    patch_edit_user,
-    post_create_user
-} from '~/api';
+import { patch_edit_user, post_create_user } from '~/api';
 import { UserData } from '~/types/server/requests';
 import { useSubscriptionTypeStore } from '~/stores';
 
@@ -197,16 +194,23 @@ export const UserEditModal = ({ user, onClose }: UserEditModalProps) => {
                         </label>
                         <Select
                             id="subscriptionType"
-                            options={subscriptionTypeStore.subscriptionTypes!.map(st => ({
-                                label: st.displayName,
-                                value: st['@id']
-                            }))}
+                            options={subscriptionTypeStore.subscriptionTypes!.map(
+                                st => ({
+                                    label: st.displayName,
+                                    value: st['@id']
+                                })
+                            )}
                             defaultValue={
-                                subscriptionTypeStore.subscriptionTypes![0]['@id'] || undefined
+                                subscriptionTypeStore.subscriptionTypes![0][
+                                    '@id'
+                                ] || undefined
                             }
                             value={userData.subscriptionType}
                             onChange={e =>
-                                setUserData(s => ({ ...s, subscriptionType: e }))
+                                setUserData(s => ({
+                                    ...s,
+                                    subscriptionType: e
+                                }))
                             }
                         />
                     </div>

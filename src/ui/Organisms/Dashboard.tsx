@@ -64,7 +64,8 @@ export const Dashboard = (): React.ReactElement => {
                     <p style={{ fontSize: '0.80rem' }}>
                         Connecté en tant que{' '}
                         <strong style={{ fontSize: '0.80rem' }}>
-                            {userStore.user!.firstname} {userStore.user!.lastname}
+                            {userStore.user!.firstname}{' '}
+                            {userStore.user!.lastname}
                         </strong>
                     </p>
                 </div>

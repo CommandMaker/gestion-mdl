@@ -23,18 +23,17 @@ import { useTimePeriodsStore } from './timePeriodsStore';
 type LoginData = {
     username: string;
     password: string;
-}
+};
 
 type UserStore = {
     user?: User;
     login: (loginData: LoginData) => Promise<void>;
     logout: () => Promise<void>;
-}
-
+};
 
 export const useUserStore = create<UserStore>()(
     persist(
-        (set) => ({
+        set => ({
             user: undefined,
             login: async (loginData: LoginData): Promise<void> => {
                 await post_login_user(loginData);

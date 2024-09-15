@@ -16,7 +16,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { getHistory } from '~/api';
-import { useSubscriptionTypeStore, useTimePeriodsStore } from '~/stores';
+import { useTimePeriodsStore } from '~/stores';
 import { CardScan } from '~/types/server/entities';
 import { UserSubscriptionTag } from '~/ui/Atoms';
 import { HourSelector, SortableTable } from '~/ui/Organisms';
@@ -39,14 +39,16 @@ export const ScanPage = (): React.ReactElement => {
 
         const socket = new WebSocket('ws://localhost:8080');
 
-        socket.addEventListener('message', (data) => {
-            const parsedData = omit(JSON.parse(data.data), ['@context']) as CardScan;
+        socket.addEventListener('message', data => {
+            const parsedData = omit(JSON.parse(data.data), [
+                '@context'
+            ]) as CardScan;
             setHistory(s => [...s, parsedData]);
         });
 
         return () => {
             socket.close();
-        }
+        };
     }, []);
 
     /**

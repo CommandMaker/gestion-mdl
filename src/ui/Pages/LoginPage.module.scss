@@ -14,22 +14,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { API_URL } from '~/types/constants';
-import { User } from '~/types/server/entities';
+.Container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
 
-export const get_all_users = async (): Promise<User[]> => {
-    const req = await fetch(`${API_URL}/api/users`, {
-        headers: {
-            Accept: 'application/ld+json'
-        },
-        credentials: 'include'
-    });
-
-    if (!req.ok) {
-        throw new Error(req.statusText);
-    }
-
-    const body = await req.json();
-
-    return body['hydra:member'];
-};
+.FormContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 400px;
+    max-width: 700px;
+}

@@ -15,14 +15,15 @@
  */
 
 import { useCallback, useEffect, useState } from 'react';
-import { delete_user, getAllUsers } from '~/api';
+import { delete_user, get_all_users } from '~/api';
+import { API_URL } from '~/types/constants';
 import { User } from '~/types/server/entities';
 import {
     FilledButton,
     UserManagementActions,
     UserSubscriptionTag
 } from '~/ui/Atoms';
-import { Modal, SortableTable } from '~/ui/Organisms';
+import { Modal, SortableTable, UserEditModal } from '~/ui/Organisms';
 
 export const UsersPage = (): React.ReactElement => {
     const [users, setUsers] = useState<User[]>();
@@ -34,15 +35,15 @@ export const UsersPage = (): React.ReactElement => {
 
     const onUserDelete = useCallback((user: User) => {
         const action = () => {
-            delete_user(user).then(d => {
-                if (d.status !== 'ok') throw new Error(d.message as string);
-                setModal(undefined);
-                setUsers(u => u?.filter(u1 => u1.id !== user.id));
+            delete_user(user).then(_ => {
+                handleModalShowChange();
+                setUsers(undefined);
             });
         };
 
         setModal(
             <Modal
+                wrapperId="confirmDelete"
                 onClose={handleModalShowChange}
                 title="Confirmer"
                 buttons={
@@ -66,19 +67,32 @@ export const UsersPage = (): React.ReactElement => {
     }, []);
 
     const onUserEdit = useCallback((user: User) => {
-        console.log('Edited');
+        setModal(<UserEditModal user={user} onClose={handleModalShowChange} />);
     }, []);
 
     const onUserCardDump = useCallback((user: User) => {
-        console.log('Card dumped');
+        window.open(`${API_URL}${user['@id']}/card`, '_blank');
+    }, []);
+
+    const openRegisterModal = useCallback(() => {
+        setModal(
+            <UserEditModal
+                onClose={() => {
+                    handleModalShowChange();
+                    setUsers(undefined);
+                }}
+            />
+        );
     }, []);
 
     /**
      * Fetch users from the API when the page is loaded
      */
     useEffect(() => {
-        getAllUsers().then(users => setUsers(users));
-    }, []);
+        if (users !== undefined) return;
+
+        get_all_users().then(users => setUsers(users));
+    }, [users]);
 
     return (
         <main>
@@ -86,59 +100,67 @@ export const UsersPage = (): React.ReactElement => {
 
             {modal}
 
+            <FilledButton
+                label="Inscrire un nouvel adhérent"
+                style={{ marginBottom: '1rem' }}
+                onClick={openRegisterModal}
+            />
+
             {users !== undefined ? (
-                <SortableTable
-                    stripped
-                    data={users}
-                    columns={[
-                        {
-                            label: 'Code',
-                            key: 'code',
-                            sortable: true,
-                            sortFunction: (a, b) =>
-                                +((a as string).match(/\d+/) || 0) <
-                                +((b as string).match(/\d+/) || 0)
-                                    ? -1
-                                    : 1,
-                            width: '150px'
-                        },
-                        {
-                            label: 'Nom',
-                            key: 'lastname',
-                            sortable: true
-                        },
-                        {
-                            label: 'Prénom',
-                            key: 'firstname',
-                            sortable: true
-                        },
-                        {
-                            label: 'Classe',
-                            key: 'grade'
-                        },
-                        {
-                            label: 'Abonnement',
-                            key: 'subscriptionType.displayName',
-                            width: '150px',
-                            renderElement: (user: User) => (
-                                <UserSubscriptionTag user={user} />
-                            )
-                        },
-                        {
-                            label: 'Actions',
-                            key: '',
-                            width: '200px',
-                            renderElement: (row: User) => (
-                                <UserManagementActions
-                                    user={row}
-                                    onDelete={onUserDelete}
-                                    onEdit={onUserEdit}
-                                    onCardDump={onUserCardDump}
-                                />
-                            )
-                        }
-                    ]}
-                />
+                <>
+                    <SortableTable
+                        stripped
+                        data={users}
+                        columns={[
+                            {
+                                label: 'Code',
+                                key: 'code',
+                                sortable: true,
+                                sortFunction: (a, b) =>
+                                    +((a as string).match(/\d+/) || 0) <
+                                        +((b as string).match(/\d+/) || 0)
+                                        ? -1
+                                        : 1,
+                                width: '150px'
+                            },
+                            {
+                                label: 'Nom',
+                                key: 'lastname',
+                                sortable: true
+                            },
+                            {
+                                label: 'Prénom',
+                                key: 'firstname',
+                                sortable: true
+                            },
+                            {
+                                label: 'Classe',
+                                key: 'grade'
+                            },
+                            {
+                                label: 'Abonnement',
+                                key: 'subscriptionType.displayName',
+                                width: '150px',
+                                renderElement: (user: User) => (
+                                    <UserSubscriptionTag user={user} />
+                                )
+                            },
+                            {
+                                label: 'Actions',
+                                key: '',
+                                width: '200px',
+                                renderElement: (row: User) => (
+                                    <UserManagementActions
+                                        user={row}
+                                        onDelete={onUserDelete}
+                                        onEdit={onUserEdit}
+                                        onCardDump={onUserCardDump}
+                                    />
+                                )
+                            }
+                        ]}
+                    />
+                </>
             ) : (
                 <p>Chargement ...</p>
             )}

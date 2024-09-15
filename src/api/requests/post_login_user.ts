@@ -15,21 +15,19 @@
  */
 
 import { API_URL } from '~/types/constants';
-import { User } from '~/types/server/entities';
 
-export const get_all_users = async (): Promise<User[]> => {
-    const req = await fetch(`${API_URL}/api/users`, {
+export const post_login_user = async (userData: object): Promise<[]> => {
+    const r = await fetch(`${API_URL}/login`, {
+        method: 'POST',
+        body: JSON.stringify(userData),
         headers: {
-            Accept: 'application/ld+json'
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
         },
         credentials: 'include'
     });
-
-    if (!req.ok) {
-        throw new Error(req.statusText);
+    if (r.ok) {
+        return r.json();
     }
-
-    const body = await req.json();
-
-    return body['hydra:member'];
+    throw new Error(r.statusText);
 };

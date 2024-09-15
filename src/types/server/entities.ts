@@ -15,13 +15,14 @@
  */
 
 export type TimePeriod = {
-    id: number;
+    '@id': string;
     displayName: string;
     startTime: string;
     endTime: string;
 };
 
 export type CardScan = {
+    '@id': string;
     code: string;
     date: string;
     timePeriodId: number;
@@ -29,13 +30,21 @@ export type CardScan = {
 };
 
 export type User = {
-    id: number;
+    '@id': string;
     firstname: string;
     lastname: string;
     grade: string;
     code: string;
     gender: string;
-    subscriptionType: { id: number; displayName: string };
+    subscriptionType: SubscriptionType;
     subscriptionEnd: string;
     subscriptionValidity: boolean;
+    isAdmin: boolean;
+    password: string;
+};
+
+export type SubscriptionType = {
+    '@id': string;
+    displayName: string;
+    duration?: string;
 };

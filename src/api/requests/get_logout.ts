@@ -15,21 +15,15 @@
  */
 
 import { API_URL } from '~/types/constants';
-import { User } from '~/types/server/entities';
 
-export const get_all_users = async (): Promise<User[]> => {
-    const req = await fetch(`${API_URL}/api/users`, {
+export const get_logout = async (): Promise<void> => {
+    const d = await fetch(`${API_URL}/api/logout`, {
         headers: {
-            Accept: 'application/ld+json'
+            Accept: 'application/json'
         },
         credentials: 'include'
     });
-
-    if (!req.ok) {
-        throw new Error(req.statusText);
+    if (!d.ok) {
+        throw new Error(d.statusText);
     }
-
-    const body = await req.json();
-
-    return body['hydra:member'];
 };

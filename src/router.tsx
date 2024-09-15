@@ -15,7 +15,13 @@
  */
 
 import { createBrowserRouter } from 'react-router-dom';
-import { BasePage, HistoryPage, ScanPage, UsersPage } from '~/ui/Pages';
+import {
+    BasePage,
+    HistoryPage,
+    ScanPage,
+    UsersPage,
+    LoginPage
+} from '~/ui/Pages';
 
 export const router = createBrowserRouter([
     {
@@ -35,5 +41,9 @@ export const router = createBrowserRouter([
                 element: <UsersPage />
             }
         ]
+    },
+    {
+        path: '/login',
+        element: <LoginPage />
     }
 ]);

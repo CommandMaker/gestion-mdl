@@ -16,10 +16,9 @@ final readonly class PasswordHasherProcessor implements ProcessorInterface
         /** @var ProcessorInterface<User, User|void> */
         private ProcessorInterface $processor,
         private UserPasswordHasherInterface $hasher
-    )
-    {}
+    ) {}
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): User|null
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ?User
     {
         if (!$data->getPassword()) {
             return $this->processor->process($data, $operation, $uriVariables, $context);

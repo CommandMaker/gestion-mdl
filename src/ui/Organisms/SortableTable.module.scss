@@ -16,4 +16,8 @@
 
 .SortableTable {
     width: 100%;
+    height: calc(100% - 126px);
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
 }

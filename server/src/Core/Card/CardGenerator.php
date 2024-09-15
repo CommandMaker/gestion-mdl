@@ -20,21 +20,22 @@ class CardGenerator
      */
     public function generateCard(User $user): string
     {
-        $image = Image::fromData(file_get_contents(Path::makeAbsolute('var/storage/card_template.jpg', $this->projectDir)) ?: '');
+        $image = Image::fromData(file_get_contents(Path::makeAbsolute('var/storage/card_template_an.png', $this->projectDir)) ?: '');
 
         $options = new QROptions([
             'outputType' => QROutputInterface::GDIMAGE_PNG,
         ]);
 
         /** @var string */
+        $color = 'bd9e57';
         $qrCode = (new QRCode($options))->render($user->getCode());
         $a = str_replace('data:image/png;base64,', '', $qrCode);
-        $qrCodeSize = 500;
+        $qrCodeSize = 600;
 
         $image
-            ->writeText(strtoupper($user->getLastname() ?: ''), fontPath: Path::makeAbsolute('var/storage/fonts/name.ttf', $this->projectDir), fontSize: 50, color: '00a4fd', posX: $image->getWidth() / 2 + 5, posY: 400)
-            ->writeText(strtoupper($user->getFirstname() ?: ''), fontPath: Path::makeAbsolute('var/storage/fonts/name.ttf', $this->projectDir), fontSize: 50, color: '00a4fd', posX: $image->getWidth() / 2 + 5, posY: 480)
-            ->writeText(strtoupper($user->getGrade() ?: ''), fontPath: Path::makeAbsolute('var/storage/fonts/class.otf', $this->projectDir), fontSize: 50, color: '00a4fd', posX: $image->getWidth() / 2 + 5, posY: 570, letterSpacing: 3)
+            ->writeText(strtoupper($user->getLastname() ?: ''), fontPath: Path::makeAbsolute('var/storage/fonts/name.ttf', $this->projectDir), fontSize: 70, color: $color, posX: $image->getWidth() / 2 + 5, posY: 477)
+            ->writeText(strtoupper($user->getFirstname() ?: ''), fontPath: Path::makeAbsolute('var/storage/fonts/name.ttf', $this->projectDir), fontSize: 70, color: $color, posX: $image->getWidth() / 2 + 5, posY: 577)
+            ->writeText(strtoupper($user->getGrade() ?: ''), fontPath: Path::makeAbsolute('var/storage/fonts/class.otf', $this->projectDir), fontSize: 70, color: $color, posX: $image->getWidth() / 2 + 5, posY: 689, letterSpacing: 3)
             ->pasteOn(
                 Image::fromBase64($a)->resizeProportion($qrCodeSize, $qrCodeSize),
                 posX: $image->getWidth() / 2 - $qrCodeSize / 2,

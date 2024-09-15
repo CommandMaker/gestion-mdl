@@ -13,6 +13,7 @@ use App\Repository\UserRepository;
 use App\State\PasswordHasherProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -35,7 +36,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ],
     ],
     operations: [
-        new GetCollection,
+        new GetCollection(
+            paginationEnabled: false
+        ),
         new Post(
             processor: PasswordHasherProcessor::class
         ),
@@ -50,7 +53,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
     ]
 )]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements PasswordAuthenticatedUserInterface, UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -87,7 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:write'])]
     private ?string $password = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['user:read', 'card_scan:read', 'user:write'])]
     private ?SubscriptionType $subscriptionType = null;
@@ -108,12 +111,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Sanction::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $sanctions;
 
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[Groups(['user:read', 'card_scan:read'])]
+    private \DateTimeImmutable $createdAt;
+
     public function __construct()
     {
         $this->cardScans = new ArrayCollection;
         $this->sanctions = new ArrayCollection;
 
         $this->roles = ['ROLE_USER'];
+        $this->createdAt = new \DateTimeImmutable;
     }
 
     public function getId(): ?int
@@ -128,7 +136,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setFirstname(string $firstname): static
     {
-        $this->firstname = $firstname;
+        $this->firstname = mb_strtoupper(mb_substr($firstname, 0, 1)) . mb_substr($firstname, 1);
 
         return $this;
     }
@@ -140,7 +148,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setLastname(string $lastname): static
     {
-        $this->lastname = $lastname;
+        $this->lastname = mb_strtoupper($lastname);
 
         return $this;
     }
@@ -270,9 +278,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->roles;
     }
 
-    public function eraseCredentials(): void
-    {
-    }
+    public function eraseCredentials(): void {}
 
     public function getPassword(): ?string
     {
@@ -289,5 +295,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this->code ?? '';
+    }
+
+    #[Groups(['user:read', 'card_scan:read'])]
+    public function getSubscriptionValidity(): bool
+    {
+        if ($this->getSubscriptionType() === null) {
+            return false;
+        }
+
+        if ($this->getSubscriptionType()->getDuration() === null) {
+            return true;
+        }
+
+        $interval = \DateInterval::createFromDateString($this->getSubscriptionType()->getDuration());
+
+        if ($this->createdAt->add($interval ?: new \DateInterval('')) >= new \DateTimeImmutable()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->createdAt = $created_at;
+
+        return $this;
     }
 }

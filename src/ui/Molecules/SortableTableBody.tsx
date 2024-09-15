@@ -35,7 +35,7 @@ export const SortableTableBody = ({
     columns
 }: SortableTableBodyProps): React.ReactElement => {
     return (
-        <tbody>
+        <tbody style={{ overflowY: 'auto' }}>
             {rows.map((r, i) => (
                 <tr
                     key={uuid()}

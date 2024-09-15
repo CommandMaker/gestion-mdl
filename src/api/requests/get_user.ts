@@ -15,15 +15,17 @@
  */
 
 import { API_URL } from '~/types/constants';
-import { TimePeriod } from '~/types/server/entities';
-import { BaseResponse } from '~/types/server/response';
+import { User } from '~/types/server/entities';
 
-export const getTimePeriods = async (): Promise<TimePeriod[]> => {
-    const req = await fetch(`${API_URL}/api/time-periods/all`);
-    const data: BaseResponse<TimePeriod[]> = await req.json();
-
-    if (req.status !== 200)
-        throw new Error(req.statusText + ' : ' + data.message);
-
-    return data.data || [];
+export const get_user = async (): Promise<User> => {
+    const d = await fetch(`${API_URL}/api/me`, {
+        headers: {
+            Accept: 'application/json'
+        },
+        credentials: 'include'
+    });
+    if (d.ok) {
+        return d.json();
+    }
+    throw new Error(d.statusText);
 };

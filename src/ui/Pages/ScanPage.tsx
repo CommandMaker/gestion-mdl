@@ -15,34 +15,48 @@
  */
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { getHistory, getTimePeriods } from '~/api';
+import { getHistory, get_all_time_periods } from '~/api';
 import { CardScan, TimePeriod } from '~/types/server/entities';
 import { UserSubscriptionTag } from '~/ui/Atoms';
 import { HourSelector, SortableTable } from '~/ui/Organisms';
+import { omit } from '~/utils';
 
 export const ScanPage = (): React.ReactElement => {
     const [hours, setHours] = useState<TimePeriod[]>();
-    const [selectedHour, setSelectedHour] = useState<number>();
-    const [history, setHistory] = useState<CardScan[]>();
+    const [selectedHour, setSelectedHour] = useState<string>();
+    const [history, setHistory] = useState<CardScan[]>([]);
     const [isLoaded, setLoaded] = useState<boolean>(false);
 
     /**
      * Fetch time periods when the page is loaded
      */
     useEffect(() => {
-        getTimePeriods().then(t => {
+        get_all_time_periods().then(t => {
+            if (t.length === 0) return;
+
             setHours(t);
-            setSelectedHour(t[0].id);
+            setSelectedHour(t[0]['@id']);
         });
+
+        const socket = new WebSocket('ws://localhost:8080');
+
+        socket.addEventListener('message', (data) => {
+            const parsedData = omit(JSON.parse(data.data), ['@context']) as CardScan;
+            setHistory(s => [...s, parsedData]);
+        });
+
+        return () => {
+            socket.close();
+        }
     }, []);
 
     /**
      * Refetch the history when time period is changed
      */
     useEffect(() => {
-        if (selectedHour === 0 || selectedHour === undefined) return;
+        if (selectedHour === undefined) return;
 
-        getHistory({ timePeriodId: selectedHour }).then(h => {
+        getHistory({ timePeriodId: selectedHour, date: new Date() }).then(h => {
             setHistory(h);
             setLoaded(true);
         });
@@ -53,7 +67,7 @@ export const ScanPage = (): React.ReactElement => {
      */
     const onHourSelectorChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) =>
-            setSelectedHour(+e.target.value),
+            setSelectedHour(e.target.value),
         []
     );
 
@@ -73,17 +87,6 @@ export const ScanPage = (): React.ReactElement => {
                 data={history || []}
                 stripped
                 columns={[
-                    {
-                        label: 'Code',
-                        key: 'code',
-                        sortable: true,
-                        sortFunction: (a, b) =>
-                            +((a as string).match(/\d+/) || 0) <
-                            +((b as string).match(/\d+/) || 0)
-                                ? -1
-                                : 1,
-                        width: '150px'
-                    },
                     {
                         label: 'Nom',
                         key: 'user.lastname',

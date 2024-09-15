@@ -15,21 +15,17 @@
  */
 
 import { API_URL } from '~/types/constants';
-import { User } from '~/types/server/entities';
+import { TimePeriod } from '~/types/server/entities';
 
-export const get_all_users = async (): Promise<User[]> => {
-    const req = await fetch(`${API_URL}/api/users`, {
+export const get_all_time_periods = async (): Promise<TimePeriod[]> => {
+    const req = await fetch(`${API_URL}/api/time_periods`, {
         headers: {
             Accept: 'application/ld+json'
         },
         credentials: 'include'
     });
 
-    if (!req.ok) {
-        throw new Error(req.statusText);
-    }
+    if (!req.ok) throw new Error(req.statusText);
 
-    const body = await req.json();
-
-    return body['hydra:member'];
+    return (await req.json())['hydra:member'];
 };

@@ -31,3 +31,19 @@ export const getNestedProp = (
         }
     }
 };
+
+/**
+ * Return the object with properties omitted
+ * Return type is the object with properties omitted
+ *
+ * @return {object}
+ */
+export const omit = <T extends { [key: string]: any }, K extends (keyof T)[]>(
+    obj: T,
+    properties: K
+): Omit<T, K[number]> => {
+    const a = structuredClone(obj);
+    properties.forEach(key => Reflect.deleteProperty(a, key));
+
+    return a;
+};

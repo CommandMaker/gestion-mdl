@@ -1,8 +1,6 @@
 {
     "preset": "laravel",
-    "exclude": [
-        "var"
-    ],
+    "exclude": ["var"],
     "rules": {
         "concat_space": {
             "spacing": "one"

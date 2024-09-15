@@ -15,21 +15,18 @@
  */
 
 import { API_URL } from '~/types/constants';
-import { User } from '~/types/server/entities';
+import { UserData } from '~/types/server/requests';
 
-export const get_all_users = async (): Promise<User[]> => {
-    const req = await fetch(`${API_URL}/api/users`, {
+export const patch_edit_user = async (user: UserData): Promise<void> => {
+    const req = await fetch(`${API_URL}${user['@id']}`, {
+        method: 'PATCH',
         headers: {
-            Accept: 'application/ld+json'
+            Accept: 'application/ld+json',
+            'Content-Type': 'application/merge-patch+json'
         },
-        credentials: 'include'
+        credentials: 'include',
+        body: JSON.stringify(user)
     });
 
-    if (!req.ok) {
-        throw new Error(req.statusText);
-    }
-
-    const body = await req.json();
-
-    return body['hydra:member'];
+    if (!req.ok) throw new Error(req.statusText);
 };

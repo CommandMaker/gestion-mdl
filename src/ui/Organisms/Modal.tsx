@@ -32,13 +32,15 @@ type ModalProps = PropsWithChildren & {
     onClose: () => void;
     title: string;
     buttons: React.ReactElement;
+    wrapperId: string;
 };
 
 export const Modal = ({
     children,
     onClose,
     title,
-    buttons
+    buttons,
+    wrapperId
 }: ModalProps): React.ReactElement => {
     const bodyRef = useRef<HTMLUListElement>(null);
 
@@ -62,28 +64,8 @@ export const Modal = ({
         };
     }, [handleKeyPress]);
 
-    /**
-     * Close the modal when clicking outside
-     */
-    useEffect(() => {
-        const callback = (e: Event): null | undefined => {
-            const el = bodyRef?.current;
-            if (!el || el.contains((e?.target as Node) || null)) return null;
-
-            onClose();
-        };
-
-        document.addEventListener('mousedown', callback);
-        document.addEventListener('touchstart', callback);
-
-        return () => {
-            document.removeEventListener('mousedown', callback);
-            document.removeEventListener('touchstart', callback);
-        };
-    }, [bodyRef]);
-
     return (
-        <PortalModal containerId={v4()}>
+        <PortalModal containerId={wrapperId}>
             <ul className={Styles.ModalBackground} ref={bodyRef}>
                 <li className={Styles.TitleLine}>
                     <h3>{title}</h3>

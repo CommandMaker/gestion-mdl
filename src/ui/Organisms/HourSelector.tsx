@@ -17,7 +17,7 @@
 import React, { memo, useState } from 'react';
 import Styles from './HourSelector.module.scss';
 import { TextRadio } from '~/ui/Atoms';
-import { TimePeriod } from '~/types/server';
+import { TimePeriod } from '~/types/server/entities';
 
 type HourSelectorProps = {
     /**
@@ -38,7 +38,7 @@ type HourSelectorProps = {
 
 export const HourSelector = memo(
     ({ name, data, onChange }: HourSelectorProps): React.ReactElement => {
-        const [selectedHour, setHour] = useState<number>();
+        const [selectedHour, setHour] = useState<string>();
 
         const populate = (): React.ReactElement[] =>
             data.map((d, i) => (
@@ -47,18 +47,18 @@ export const HourSelector = memo(
                     name={name}
                     onChange={onSelected}
                     label={d.displayName}
-                    value={d.id.toString()}
-                    key={d.id}
+                    value={d['@id']}
+                    key={d['@id']}
                     checked={
                         selectedHour === undefined
                             ? i === 0
-                            : selectedHour === d.id
+                            : selectedHour === d['@id']
                     }
                 />
             ));
 
         const onSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
-            setHour(+e.target.value);
+            setHour(e.target.value);
             onChange(e);
         };
 

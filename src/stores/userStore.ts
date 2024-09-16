@@ -18,7 +18,6 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { get_logout, get_user, post_login_user } from '~/api';
 import { User } from '~/types/server/entities';
-import { useTimePeriodsStore } from './timePeriodsStore';
 
 type LoginData = {
     username: string;

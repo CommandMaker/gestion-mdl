@@ -18,7 +18,7 @@ import { Input, Select } from 'antd';
 import Styles from './LoginPage.module.scss';
 import { FilledButton } from '../Atoms';
 import { useCallback, useEffect, useState } from 'react';
-import { post_login_user, get_all_users } from '~/api';
+import { get_all_users } from '~/api';
 import { useNavigate } from 'react-router-dom';
 import { MDLIcon } from '../Atoms/Icons/Icons';
 import { User } from '~/types/server/entities';

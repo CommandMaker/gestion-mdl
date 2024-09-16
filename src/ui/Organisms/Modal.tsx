@@ -23,7 +23,6 @@ import {
     useState
 } from 'react';
 import { createPortal } from 'react-dom';
-import { v4 } from 'uuid';
 import { XMarkIcon } from '~/ui/Atoms';
 
 import Styles from './Modal.module.scss';

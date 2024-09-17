@@ -13,3 +13,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import { API_URL } from '~/types/constants';
+import { FoyerOpenHistory } from '~/types/server/entities';
+
+export const get_all_open_history = async (): Promise<FoyerOpenHistory[]> => {
+    const req = await fetch(`${API_URL}/api/foyer_open_histories`, {
+        headers: {
+            Accept: 'application/ld+json'
+        },
+        credentials: 'include'
+    });
+
+    if (!req.ok)
+        throw new Error(req.statusText);
+
+    return (await req.json())['hydra:member'];
+}

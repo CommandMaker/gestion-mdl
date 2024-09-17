@@ -20,7 +20,8 @@ import {
     HistoryPage,
     ScanPage,
     UsersPage,
-    LoginPage
+    LoginPage,
+    OpenHistoryPage
 } from '~/ui/Pages';
 
 export const router = createBrowserRouter([
@@ -39,6 +40,10 @@ export const router = createBrowserRouter([
             {
                 path: '/adherents',
                 element: <UsersPage />
+            },
+            {
+                path: '/open-history',
+                element: <OpenHistoryPage />
             }
         ]
     },

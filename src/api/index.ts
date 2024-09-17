@@ -5,6 +5,7 @@ export { get_logout } from './requests/get_logout';
 export { get_all_users } from './requests/get_all_users';
 export { get_user } from './requests/get_user';
 export { delete_user } from './requests/delete_user';
+export { get_all_open_history } from './requests/get_all_open_history';
 export { getHistory } from './requests/get_history';
 export { get_all_subscription_types } from './requests/get_all_subscription_types';
 export { post_create_user } from './requests/post_create_user';

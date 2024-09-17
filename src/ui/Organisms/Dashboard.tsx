@@ -113,9 +113,9 @@ export const Dashboard = (): React.ReactElement => {
                     />
                     <Button
                         label="Historique des ouvertures"
-                        onClick={() => {}}
+                        onClick={() => navigate('/open-history')}
                         icon={<SignatureIcon />}
-                        selected={location === '/opens'}
+                        selected={location === '/open-history'}
                     />
                     <Button
                         label="Horaires"

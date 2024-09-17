@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\FoyerOpenHistory;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -9,8 +11,14 @@ use Symfony\Component\Routing\Attribute\Route;
 class APIJsonLoginController extends AbstractController
 {
     #[Route('/login', name: 'login.json', methods: 'POST')]
-    public function index(): JsonResponse
+    public function index(EntityManagerInterface $em): JsonResponse
     {
+        $history = new FoyerOpenHistory();
+        $history->setUser($this->getUser());
+
+        $em->persist($history);
+        $em->flush();
+
         return $this->json([]);
     }
 

@@ -4,4 +4,5 @@ export { LoginPage } from './LoginPage';
 export { HistoryPage } from './HistoryPage';
 export { UsersPage } from './UsersPage';
 export { BasePage } from './BasePage';
+export { OpenHistoryPage } from './OpenHistoryPage';
 export { ScanPage } from './ScanPage';

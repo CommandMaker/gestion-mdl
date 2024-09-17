@@ -48,3 +48,9 @@ export type SubscriptionType = {
     displayName: string;
     duration?: string;
 };
+
+export type FoyerOpenHistory = {
+    '@id': string;
+    user: User;
+    date: string;
+}

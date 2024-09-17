@@ -115,6 +115,12 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[Groups(['user:read', 'card_scan:read'])]
     private \DateTimeImmutable $createdAt;
 
+    /**
+     * @var Collection<int, FoyerOpenHistory>
+     */
+    #[ORM\OneToMany(targetEntity: FoyerOpenHistory::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $foyerOpenHistories;
+
     public function __construct()
     {
         $this->cardScans = new ArrayCollection;
@@ -122,6 +128,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
         $this->roles = ['ROLE_USER'];
         $this->createdAt = new \DateTimeImmutable;
+        $this->foyerOpenHistories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -325,6 +332,36 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->createdAt = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FoyerOpenHistory>
+     */
+    public function getFoyerOpenHistories(): Collection
+    {
+        return $this->foyerOpenHistories;
+    }
+
+    public function addFoyerOpenHistory(FoyerOpenHistory $foyerOpenHistory): static
+    {
+        if (!$this->foyerOpenHistories->contains($foyerOpenHistory)) {
+            $this->foyerOpenHistories->add($foyerOpenHistory);
+            $foyerOpenHistory->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFoyerOpenHistory(FoyerOpenHistory $foyerOpenHistory): static
+    {
+        if ($this->foyerOpenHistories->removeElement($foyerOpenHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($foyerOpenHistory->getUser() === $this) {
+                $foyerOpenHistory->setUser(null);
+            }
+        }
 
         return $this;
     }

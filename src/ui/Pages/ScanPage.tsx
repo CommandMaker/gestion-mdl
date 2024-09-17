@@ -27,6 +27,7 @@ export const ScanPage = (): React.ReactElement => {
     const [history, setHistory] = useState<CardScan[]>([]);
     const [isLoaded, setLoaded] = useState<boolean>(false);
     const timePeriodsStore = useTimePeriodsStore();
+    const [isSocketOpened, setSocketOpened] = useState<boolean>(false);
 
     /**
      * Fetch time periods when the page is loaded
@@ -38,6 +39,9 @@ export const ScanPage = (): React.ReactElement => {
         });
 
         const socket = new WebSocket('ws://localhost:8080');
+
+        socket.addEventListener('open', () => setSocketOpened(true));
+        socket.addEventListener('close', () => setSocketOpened(false));
 
         socket.addEventListener('message', data => {
             const parsedData = omit(JSON.parse(data.data), [
@@ -74,7 +78,10 @@ export const ScanPage = (): React.ReactElement => {
 
     return isLoaded ? (
         <main>
-            <h1>Entrées du foyer</h1>
+            <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <h1>Entrées du foyer</h1>
+                <p>État du service de scan : <strong>{isSocketOpened ? 'Fonctionel' : 'Déconnecté'}</strong></p>
+            </div>
 
             <HourSelector
                 name="hours"

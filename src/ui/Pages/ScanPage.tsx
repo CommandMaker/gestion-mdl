@@ -34,7 +34,6 @@ export const ScanPage = (): React.ReactElement => {
      */
     useEffect(() => {
         timePeriodsStore.fetchData().then(tps => {
-            console.log(tps);
             setSelectedHour(tps[0]['@id']);
         });
 

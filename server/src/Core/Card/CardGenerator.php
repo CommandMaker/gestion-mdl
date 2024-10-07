@@ -34,9 +34,9 @@ class CardGenerator
         $qrCodeSize = 600;
 
         $image
-            ->writeText(strtoupper($user->getLastname() ?: ''), fontPath: Path::makeAbsolute('var/storage/fonts/name.ttf', $this->projectDir), fontSize: 70, color: $color, posX: $image->getWidth() / 2 + 5, posY: 477)
-            ->writeText(strtoupper($user->getFirstname() ?: ''), fontPath: Path::makeAbsolute('var/storage/fonts/name.ttf', $this->projectDir), fontSize: 70, color: $color, posX: $image->getWidth() / 2 + 5, posY: 577)
-            ->writeText(strtoupper($user->getGrade() ?: ''), fontPath: Path::makeAbsolute('var/storage/fonts/class.otf', $this->projectDir), fontSize: 70, color: $color, posX: $image->getWidth() / 2 + 5, posY: 689, letterSpacing: 3)
+            ->writeText(mb_strtoupper($user->getLastname() ?: ''), fontPath: Path::makeAbsolute('var/storage/fonts/name.ttf', $this->projectDir), fontSize: 70, color: $color, posX: $image->getWidth() / 2 + 5, posY: 477)
+            ->writeText(mb_strtoupper($user->getFirstname() ?: ''), fontPath: Path::makeAbsolute('var/storage/fonts/name.ttf', $this->projectDir), fontSize: 70, color: $color, posX: $image->getWidth() / 2 + 5, posY: 577)
+            ->writeText(mb_strtoupper($user->getGrade() ?: ''), fontPath: Path::makeAbsolute('var/storage/fonts/class.otf', $this->projectDir), fontSize: 70, color: $color, posX: $image->getWidth() / 2 + 5, posY: 689, letterSpacing: 3)
             ->pasteOn(
                 Image::fromBase64($a)->resizeProportion($qrCodeSize, $qrCodeSize),
                 posX: $image->getWidth() / 2 - $qrCodeSize / 2,

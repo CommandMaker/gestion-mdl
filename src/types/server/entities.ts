@@ -53,4 +53,4 @@ export type FoyerOpenHistory = {
     '@id': string;
     user: User;
     date: string;
-}
+};

@@ -34,12 +34,17 @@ type HourSelectorProps = {
      * Function triggered when an hour is selected
      */
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+
+    value: string;
 };
 
 export const HourSelector = memo(
-    ({ name, data, onChange }: HourSelectorProps): React.ReactElement => {
-        const [selectedHour, setHour] = useState<string>();
-
+    ({
+        name,
+        data,
+        onChange,
+        value
+    }: HourSelectorProps): React.ReactElement => {
         const populate = (): React.ReactElement[] =>
             data.map((d, i) => (
                 <TextRadio
@@ -49,17 +54,12 @@ export const HourSelector = memo(
                     label={d.displayName}
                     value={d['@id']}
                     key={d['@id']}
-                    checked={
-                        selectedHour === undefined
-                            ? i === 0
-                            : selectedHour === d['@id']
-                    }
+                    checked={d['@id'] === value}
                 />
             ));
 
         const onSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
-            setHour(e.target.value);
-            onChange(e);
+            //onChange(e);
         };
 
         return (

@@ -10,11 +10,17 @@ use ApiPlatform\Metadata\Post;
 use App\Repository\TimePeriodRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Context;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 #[ORM\Entity(repositoryClass: TimePeriodRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection,
+        new GetCollection(
+            normalizationContext: [
+                'datetime_format' => 'H:i:s'
+            ]
+        ),
         new Post,
         new Patch,
         new Delete,
@@ -31,9 +37,11 @@ class TimePeriod
     private ?string $displayName = null;
 
     #[ORM\Column(type: Types::TIME_IMMUTABLE)]
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'H:i:s'])]
     private ?\DateTimeInterface $startTime = null;
 
     #[ORM\Column(type: Types::TIME_IMMUTABLE)]
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'H:i:s'])]
     private ?\DateTimeInterface $endTime = null;
 
     public function getId(): ?int

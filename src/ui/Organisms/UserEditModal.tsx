@@ -57,7 +57,11 @@ export const UserEditModal = ({ user, onClose }: UserEditModalProps) => {
     useEffect(() => {
         subscriptionTypeStore.fetchData();
 
-        setUserData(s => ({ ...s, subscriptionType: subscriptionTypeStore.subscriptionTypes[0]['@id'] }));
+        // @ts-ignore
+        setUserData(s => ({
+            ...s,
+            subscriptionType: subscriptionTypeStore.subscriptionTypes[0]['@id']
+        }));
 
         user
             ? setUserData(s => ({

@@ -26,32 +26,62 @@ export const OpenHistoryPage = (): React.ReactElement => {
         get_all_open_history().then(d => setHistory(d));
     }, []);
 
-    return <main>
-        <h1>Historique des ouvertures</h1>
+    return (
+        <main>
+            <h1>Historique des ouvertures</h1>
 
-        {history ?
-            <SortableTable
-                data={history!}
-                columns={[
-                    {
-                        label: 'Date',
-                        key: 'date',
-                        renderElement: (row: FoyerOpenHistory): React.ReactElement => {
-                            const date = new Date(row.date);
+            {history ? (
+                <SortableTable
+                    data={history!}
+                    columns={[
+                        {
+                            label: 'Date',
+                            key: 'date',
+                            renderElement: (
+                                row: FoyerOpenHistory
+                            ): React.ReactElement => {
+                                const date = new Date(row.date);
 
-                            return <p>{date.getDate().toString().padStart(2, '0')}/{date.getMonth().toString().padStart(2, '0')}/{date.getFullYear()} à {date.getHours().toString().padStart(2, '0')}:{date.getMinutes().toString().padStart(2, '0')}</p>
+                                return (
+                                    <p>
+                                        {date
+                                            .getDate()
+                                            .toString()
+                                            .padStart(2, '0')}
+                                        /
+                                        {date
+                                            .getMonth()
+                                            .toString()
+                                            .padStart(2, '0')}
+                                        /{date.getFullYear()} à{' '}
+                                        {date
+                                            .getHours()
+                                            .toString()
+                                            .padStart(2, '0')}
+                                        :
+                                        {date
+                                            .getMinutes()
+                                            .toString()
+                                            .padStart(2, '0')}
+                                    </p>
+                                );
+                            },
+                            sortable: true
                         },
-                        sortable: true
-                    },
-                    {
-                        label: 'Gérant',
-                        key: 'user.firstname',
-                        renderElement: (row: FoyerOpenHistory) => <p>{row.user.firstname} {row.user.lastname}</p>
-                    }
-                ]}
-            />
-            :
-            <p>Chargement ...</p>
-        }
-    </main>
-}
+                        {
+                            label: 'Gérant',
+                            key: 'user.firstname',
+                            renderElement: (row: FoyerOpenHistory) => (
+                                <p>
+                                    {row.user.firstname} {row.user.lastname}
+                                </p>
+                            )
+                        }
+                    ]}
+                />
+            ) : (
+                <p>Chargement ...</p>
+            )}
+        </main>
+    );
+};

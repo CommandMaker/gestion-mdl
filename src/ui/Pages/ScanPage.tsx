@@ -15,8 +15,9 @@
  */
 
 import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getHistory } from '~/api';
-import { useTimePeriodsStore } from '~/stores';
+import { useTimePeriodsStore, useUserStore } from '~/stores';
 import { CardScan } from '~/types/server/entities';
 import { UserSubscriptionTag } from '~/ui/Atoms';
 import { HourSelector, SortableTable } from '~/ui/Organisms';
@@ -26,15 +27,18 @@ export const ScanPage = (): React.ReactElement => {
     const [selectedHour, setSelectedHour] = useState<string>();
     const [history, setHistory] = useState<CardScan[]>([]);
     const [isLoaded, setLoaded] = useState<boolean>(false);
-    const timePeriodsStore = useTimePeriodsStore();
     const [isSocketOpened, setSocketOpened] = useState<boolean>(false);
+    const timePeriodsStore = useTimePeriodsStore();
+    const userStore = useUserStore();
+    const navigate = useNavigate();
 
     /**
      * Fetch time periods when the page is loaded
      */
     useEffect(() => {
         timePeriodsStore.fetchData().then(tps => {
-            setSelectedHour(tps[0]['@id']);
+            const timePeriod = timePeriodsStore.getCurrentTimePeriod();
+            setSelectedHour(timePeriod);
         });
 
         const socket = new WebSocket('ws://localhost:8080');
@@ -53,6 +57,38 @@ export const ScanPage = (): React.ReactElement => {
             socket.close();
         };
     }, []);
+
+    useEffect(() => {
+        let cId;
+
+        const callback = () => {
+            const timePeriod = timePeriodsStore.getCurrentTimePeriod();
+
+            if (timePeriod !== selectedHour && selectedHour !== undefined) {
+                console.log(selectedHour);
+                userStore.logout().then(_ => navigate('/login'));
+            }
+
+            setSelectedHour(timePeriod);
+        };
+
+        let a = setTimeout(
+            () => {
+                callback();
+                cId = setInterval(() => callback(), 60 * 1000);
+            },
+            (60 - new Date().getSeconds()) * 1000
+        );
+
+        return () => {
+            if (a) clearTimeout(a);
+
+            if (cId) {
+                clearInterval(cId);
+                cId = undefined;
+            }
+        };
+    }, [selectedHour]);
 
     /**
      * Refetch the history when time period is changed
@@ -77,15 +113,28 @@ export const ScanPage = (): React.ReactElement => {
 
     return isLoaded ? (
         <main>
-            <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+            <div
+                style={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                }}
+            >
                 <h1>Entrées du foyer</h1>
-                <p>État du service de scan : <strong>{isSocketOpened ? 'Fonctionel' : 'Déconnecté'}</strong></p>
+                <p>
+                    État du service de scan :{' '}
+                    <strong>
+                        {isSocketOpened ? 'Fonctionel' : 'Déconnecté'}
+                    </strong>
+                </p>
             </div>
 
             <HourSelector
                 name="hours"
                 data={timePeriodsStore.timePeriods || []}
                 onChange={onHourSelectorChange}
+                value={selectedHour}
             />
 
             <div style={{ width: '100%', margin: '1rem 0' }} aria-hidden />

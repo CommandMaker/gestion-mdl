@@ -25,8 +25,7 @@ export const get_all_open_history = async (): Promise<FoyerOpenHistory[]> => {
         credentials: 'include'
     });
 
-    if (!req.ok)
-        throw new Error(req.statusText);
+    if (!req.ok) throw new Error(req.statusText);
 
     return (await req.json())['hydra:member'];
-}
+};

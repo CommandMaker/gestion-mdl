@@ -22,6 +22,7 @@ import { TimePeriod } from '~/types/server/entities';
 type TimePeriodsStore = {
     timePeriods?: TimePeriod[];
     fetchData: () => Promise<TimePeriod[]>;
+    getCurrentTimePeriod: () => TimePeriod;
 };
 
 export const useTimePeriodsStore = create<TimePeriodsStore>()(
@@ -36,6 +37,23 @@ export const useTimePeriodsStore = create<TimePeriodsStore>()(
                 set({ timePeriods: timePeriods });
 
                 return timePeriods;
+            },
+            getCurrentTimePeriod: (): string => {
+                const currentTime = new Date();
+                const fDate = `${currentTime.getHours().toString().padStart(2, '0')}:${currentTime.getMinutes().toString().padStart(2, '0')}:${currentTime.getSeconds().toString().padStart(2, '0')}`;
+
+                if (get().timePeriods !== undefined) {
+                    for (const period of get().timePeriods) {
+                        if (
+                            fDate >= period.startTime &&
+                            fDate < period.endTime
+                        ) {
+                            return period['@id'];
+                        }
+                    }
+                }
+
+                return '/api/time_periods/1';
             }
         }),
         {

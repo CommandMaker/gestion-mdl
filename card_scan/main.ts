@@ -38,10 +38,10 @@ function getCurrentTimePeriod(timePeriods: TimePeriod[]): number {
     const currentTime = currentDate.getTime();
 
     for (const period of timePeriods) {
-        const sStart = period.start_time.split(':')
+        const sStart = period.start_time.split(':');
         const sEnd = period.end_time.split(':');
-        const start = (new Date()).setHours(+sStart[0], +sStart[1], +sStart[2]);
-        const end = (new Date()).setHours(+sEnd[0], +sEnd[1], +sEnd[2]);
+        const start = new Date().setHours(+sStart[0], +sStart[1], +sStart[2]);
+        const end = new Date().setHours(+sEnd[0], +sEnd[1], +sEnd[2]);
 
         if (currentTime >= start && currentTime <= end) {
             return period.id;

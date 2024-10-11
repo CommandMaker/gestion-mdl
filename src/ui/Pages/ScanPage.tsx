@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getHistory } from '~/api';
 import { useTimePeriodsStore, useUserStore } from '~/stores';
@@ -36,7 +36,7 @@ export const ScanPage = (): React.ReactElement => {
      * Fetch time periods when the page is loaded
      */
     useEffect(() => {
-        timePeriodsStore.fetchData().then(tps => {
+        timePeriodsStore.fetchData().then(_ => {
             const timePeriod = timePeriodsStore.getCurrentTimePeriod();
             setSelectedHour(timePeriod);
         });
@@ -59,7 +59,7 @@ export const ScanPage = (): React.ReactElement => {
     }, []);
 
     useEffect(() => {
-        let cId;
+        let cId: NodeJS.Timeout;
 
         const callback = () => {
             const timePeriod = timePeriodsStore.getCurrentTimePeriod();
@@ -85,7 +85,6 @@ export const ScanPage = (): React.ReactElement => {
 
             if (cId) {
                 clearInterval(cId);
-                cId = undefined;
             }
         };
     }, [selectedHour]);
@@ -101,15 +100,6 @@ export const ScanPage = (): React.ReactElement => {
             setLoaded(true);
         });
     }, [selectedHour]);
-
-    /**
-     * Function triggered when the user change the selected hour in the selector
-     */
-    const onHourSelectorChange = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement>) =>
-            setSelectedHour(e.target.value),
-        []
-    );
 
     return isLoaded ? (
         <main>
@@ -133,8 +123,8 @@ export const ScanPage = (): React.ReactElement => {
             <HourSelector
                 name="hours"
                 data={timePeriodsStore.timePeriods || []}
-                onChange={onHourSelectorChange}
-                value={selectedHour}
+                onChange={() => {}}
+                value={selectedHour || ''}
             />
 
             <div style={{ width: '100%', margin: '1rem 0' }} aria-hidden />

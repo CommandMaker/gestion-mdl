@@ -17,26 +17,25 @@
 import React, { useEffect, useState } from 'react';
 import { DatePicker, Input, type DatePickerProps } from 'antd';
 import { HourSelector, SortableTable } from '~/ui/Organisms';
-import { CardScan, TimePeriod } from '~/types/server/entities';
-import { getHistory, get_all_time_periods } from '~/api';
+import { CardScan } from '~/types/server/entities';
+import { getHistory } from '~/api';
 import { UserSubscriptionTag } from '~/ui/Atoms';
 import { GetHistoryRequest } from '~/types/server/requests';
+import { useTimePeriodsStore } from '~/stores';
 
 export const HistoryPage = (): React.ReactElement => {
     const [requestData, setRequestData] = useState<GetHistoryRequest>({
         timePeriodId: ''
     });
-    const [timePeriods, setTimePeriods] = useState<TimePeriod[]>([]);
     const [history, setHistory] = useState<CardScan[]>([]);
     const [filteredHistory, setFilteredHistory] = useState<CardScan[]>([]);
+    const timePeriodStore = useTimePeriodsStore();
 
     /**
      * Fetch the time periods when page is loaded
      */
     useEffect(() => {
-        get_all_time_periods().then(d => {
-            setTimePeriods(d);
-
+        timePeriodStore.fetchData().then(d => {
             d.length > 0
                 ? setRequestData(s => ({ ...s, timePeriodId: d[0]['@id'] }))
                 : undefined;
@@ -71,13 +70,14 @@ export const HistoryPage = (): React.ReactElement => {
             <p style={{ margin: '1rem 0' }}>Puis une plage horaire :</p>
             <HourSelector
                 name="hours"
-                data={timePeriods}
+                data={timePeriodStore.timePeriods || []}
                 onChange={e =>
                     setRequestData(s => ({
                         ...s,
                         timePeriodId: e.target.value
                     }))
                 }
+                value={requestData.timePeriodId}
             />
 
             <div style={{ height: 0, margin: '2rem 0' }} />

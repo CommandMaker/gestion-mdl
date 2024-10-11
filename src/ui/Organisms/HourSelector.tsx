@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import Styles from './HourSelector.module.scss';
 import { TextRadio } from '~/ui/Atoms';
 import { TimePeriod } from '~/types/server/entities';
@@ -46,7 +46,7 @@ export const HourSelector = memo(
         value
     }: HourSelectorProps): React.ReactElement => {
         const populate = (): React.ReactElement[] =>
-            data.map((d, i) => (
+            data.map(d => (
                 <TextRadio
                     id={d.displayName}
                     name={name}
@@ -59,7 +59,7 @@ export const HourSelector = memo(
             ));
 
         const onSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
-            //onChange(e);
+            onChange(e);
         };
 
         return (

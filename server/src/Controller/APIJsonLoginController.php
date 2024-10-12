@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\FoyerOpenHistory;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,7 +15,9 @@ class APIJsonLoginController extends AbstractController
     public function index(EntityManagerInterface $em): JsonResponse
     {
         $history = new FoyerOpenHistory();
-        $history->setUser($this->getUser());
+        /** @var User */
+        $user = $this->getUser();
+        $history->setUser($user);
 
         $em->persist($history);
         $em->flush();

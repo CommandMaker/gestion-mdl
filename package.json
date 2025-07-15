@@ -1,0 +1,22 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite --host"
+    },
+    "devDependencies": {
+        "@types/node": "^22.15.3",
+        "@vitejs/plugin-vue": "^5.2.3",
+        "@vue/tsconfig": "^0.7.0",
+        "laravel-vite-plugin": "^1.2.0",
+        "sass-embedded": "^1.87.0",
+        "typescript": "^5.8.3",
+        "vite": "^6.2.4",
+        "vue-tsc": "^2.2.10"
+    },
+    "dependencies": {
+        "axios": "^1.8.2",
+        "vue": "^3.5.13"
+    }
+}

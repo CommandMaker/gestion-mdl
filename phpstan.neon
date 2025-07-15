@@ -1,0 +1,15 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/nesbot/carbon/extension.neon
+
+parameters:
+  paths:
+    - app/
+    - tests/
+    - routes/
+    - database/
+
+  # This is the maximum level of PHPStan (0-9)
+  level: 9
+
+# vim: set ft=yaml:

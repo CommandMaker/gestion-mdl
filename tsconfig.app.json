@@ -1,0 +1,19 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "compilerOptions": {
+        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+
+        /* Linting */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedSideEffectImports": true,
+
+        "baseUrl": "./resources/",
+        "paths": {
+            "@/*": ["ts/*"]
+        }
+    },
+    "include": ["resources/ts/**/*.ts", "resources/ts/**/*.tsx", "resources/ts/**/*.vue"]
+}
